@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Repository } from "./models/repository";
+import { Instruction } from "./models/instruction-model/instruction.model";
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  constructor(private repository: Repository) {} 
+  
+    get instruction(): Instruction {
+      return this.repository.instruction;
+  }
 }
