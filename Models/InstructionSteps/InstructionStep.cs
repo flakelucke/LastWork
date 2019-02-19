@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace LastWork.Models.Instructions
+namespace LastWork.Models.InstructionSteps
 {
     public class InstructionStep
     {

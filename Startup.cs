@@ -1,8 +1,12 @@
+using LastWork.Models;
+using LastWork.Models.Instructions;
+using LastWork.Models.InstructionSteps;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,7 +26,13 @@ namespace LastWork
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddDbContext<DataContext>(options =>
+                        options.UseSqlServer(Configuration["Data:Flake:ConnectionString"]));
             // In production, the Angular files will be served from this directory
+
+            services.AddTransient<IInstructionRepository, DataInstructionRepository>();
+            services.AddTransient<IStepRepository, DataStepRepository>();
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -66,6 +76,9 @@ namespace LastWork
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            // SeedData.SeedDatabase(app.ApplicationServices
+            //     .GetRequiredService<DataContext>());
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LastWork.Models.InstructionSteps;
 
 namespace LastWork.Models.Instructions
 {
