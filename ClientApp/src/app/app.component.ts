@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Repository } from "./models/repository";
 import { Instruction } from "./models/instruction-model/instruction.model";
+import { NavMenuComponent } from "./nav-menu/nav-menu.component";
 
 @Component({
   selector: 'app-root',
