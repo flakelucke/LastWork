@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using LastWork.Models.InstructionSteps;
 
 namespace LastWork.Models.Instructions
 {
@@ -22,13 +23,29 @@ namespace LastWork.Models.Instructions
 
         public Task<Instruction> FindInstructionByIdAsync(string instructionId)
         {
-             return  context.Instructions.Where(x => Convert.ToString(x.InstructionId) == instructionId)
-            .SingleOrDefaultAsync();
+#region Avoid Circular References
+            // Instruction result = context.Instructions
+            //     .Include(p => p.Steps)
+            //     .SingleOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
+
+            //  if (result != null) {
+            //     if (result.Steps != null) {
+            //     result.Steps.Instructions = null;
+            //     }
+            //  }
+            //  return result;
+    #endregion
+    
+            return  context.Instructions
+                .Include(p => p.Steps)
+                .SingleOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
         }
 
         public async Task<IEnumerable<Instruction>> GetAllInstructions()
         {
-            return await context.Instructions.ToListAsync();
+            return await context.Instructions
+            .Include(p => p.Steps)
+            .ToListAsync();
         }
     }
 }
