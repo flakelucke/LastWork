@@ -16,19 +16,16 @@ namespace LastWork.Controllers
             this.repository = repository;
         }
 
-        // [HttpGet]
-        // public async Task<IEnumerable<Instruction>> GetAllInstruction(long id)
-        // {
-        //     var n = await repository.GetAllInstructions();
-        //     return n;
-        // }
+        [HttpGet]
+        public async Task<IEnumerable<Instruction>> GetAllInstruction(long id)
+        {
+            return await repository.GetAllInstructions();
+        }
 
         [HttpGet("{id}")]
-        public async Task<Instruction> GetInstruction(long id)
+        public async Task<IActionResult> GetInstruction(long id)
         {
-
-            var k = await repository.FindInstructionByIdAsync(id.ToString());
-            return k;
+            return Ok(await repository.FindInstructionByIdAsync(id.ToString()));
         }
     }
 }

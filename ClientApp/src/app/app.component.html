@@ -1,6 +1,14 @@
 <table class="table table-sm table-striped">
- <tr><th>Id</th><td>{{instruction?.instructionId}}</td></tr>
- <tr><th>Name</th><td>{{instruction?.instructionName}}</td></tr>
- <tr><th>Description</th><td>{{instruction?.description}}</td></tr>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Step</th>
+    </tr>
+    <tr *ngFor="let inst of instructions">
+        <td>{{inst.instructionId}}</td>
+        <td>{{inst.instructionName}}</td>
+        <td>{{inst.description}}</td>
+        <td>{{inst.steps?.length || 'None'}}</td>
+    </tr>
 </table>
-<p>asdsadas</p>
