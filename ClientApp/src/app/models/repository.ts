@@ -17,7 +17,7 @@ export class Repository {
 
     getInstructions() {
         this.sendRequest(RequestMethod.Get, instructionsUrl)
-        .subscribe(response => { this.instructions= response })
+        .subscribe(response => { this.instructions = response })
     }
 
     getInstruction(id: number) {
@@ -25,11 +25,34 @@ export class Repository {
             .subscribe(response => { this.instruction = response; });
     }
 
+    createInstruction(instr: Instruction) {
+
+        let data = {
+            instructionName: instr.instructionName, description: instr.description
+            ,steps: instr.steps
+        };
+        this.sendRequest(RequestMethod.Post, instructionsUrl, data)
+            .subscribe(response => {
+                instr.instructionId = response;
+                this.instructions.push(instr);
+            });
+    }
+
+    deleteInstruction(id: number) {
+        this.sendRequest(RequestMethod.Delete, instructionsUrl + "/" + id)
+            .subscribe(() => {
+                console.log(1);
+               this.getInstructions();
+            });
+    }
 
     private sendRequest(verb: RequestMethod, url: string,
         data?: any): Observable<any> {
         return this.http.request(new Request({
             method: verb, url: url, body: data
-        })).map(response => response.json());
+        })).map(response => {
+            return response.headers.get("Content-Length") != "0"
+                ? response.json() : null;
+        });
     }
 }
