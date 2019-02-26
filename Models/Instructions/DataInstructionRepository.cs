@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using LastWork.Models.InstructionSteps;
+using LastWork.Models.BindingTargets;
 
 namespace LastWork.Models.Instructions
 {
@@ -16,27 +17,9 @@ namespace LastWork.Models.Instructions
              this.context = context;
          }
 
-        public Task AddInstructionAsync(Instruction instruction)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public Task<Instruction> FindInstructionByIdAsync(string instructionId)
         {
-#region Avoid Circular References
-            // Instruction result = context.Instructions
-            //     .Include(p => p.Steps)
-            //     .SingleOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
-
-            //  if (result != null) {
-            //     if (result.Steps != null) {
-            //     result.Steps.Instructions = null;
-            //     }
-            //  }
-            //  return result;
-    #endregion
-    
-            return  context.Instructions
+             return  context.Instructions
                 .Include(p => p.Steps)
                 .SingleOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
         }
@@ -46,6 +29,21 @@ namespace LastWork.Models.Instructions
             return await context.Instructions
             .Include(p => p.Steps)
             .ToListAsync();
+        }
+
+        public async Task<long> CreateInstruction(InstructionData data)
+        {
+            Instruction i = data.GetInsruction();
+            await context.AddAsync(i);
+            await context.SaveChangesAsync();
+            return i.InstructionId;
+        }
+
+        public async Task DeleteInstruction(long id)
+        {
+            var instructionForDelete = await FindInstructionByIdAsync(id.ToString());
+            context.Remove(instructionForDelete);
+            await context.SaveChangesAsync();
         }
     }
 }

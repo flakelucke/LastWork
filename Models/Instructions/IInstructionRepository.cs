@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LastWork.Models.BindingTargets;
 
 namespace LastWork.Models.Instructions
 {
@@ -7,6 +8,7 @@ namespace LastWork.Models.Instructions
     {
         Task<IEnumerable<Instruction>> GetAllInstructions();
         Task<Instruction> FindInstructionByIdAsync(string instructionId);
-        Task AddInstructionAsync(Instruction instruction);
+        Task<long> CreateInstruction(InstructionData data);
+        Task DeleteInstruction(long id);
     }
 }
