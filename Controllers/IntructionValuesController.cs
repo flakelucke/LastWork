@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using LastWork.Models;
 using System.Collections.Generic;
 using LastWork.Models.BindingTargets;
+using Microsoft.AspNetCore.JsonPatch;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace LastWork.Controllers
 {
@@ -13,7 +16,7 @@ namespace LastWork.Controllers
     {
         private IInstructionRepository repository;
         private DataContext context;
-        public IntructionValuesController(IInstructionRepository repository,DataContext context)
+        public IntructionValuesController(IInstructionRepository repository, DataContext context)
         {
             this.repository = repository;
             this.context = context;
@@ -35,7 +38,7 @@ namespace LastWork.Controllers
         {
             if (ModelState.IsValid)
             {
-                var idInst =await  repository.CreateInstruction(idata);
+                var idInst = await repository.CreateInstruction(idata);
                 return Ok(idInst);
             }
             else
@@ -45,9 +48,37 @@ namespace LastWork.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(long id) {
+        public async Task<IActionResult> DeleteProduct(long id)
+        {
             await repository.DeleteInstruction(id);
             return Ok();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult UpdateInstruction(long id,
+                [FromBody]JsonPatchDocument<InstructionData> patch)
+        {
+            Instruction instruction = context.Instructions
+                        .Include(p => p.Steps)
+                                .FirstOrDefault(p => p.InstructionId == id);
+            InstructionData pdata = new InstructionData
+            {
+                InstructionName = instruction.InstructionName,
+                Description = instruction.Description,
+                Steps = instruction.Steps.Select(p => new InstructionStepData
+                { StepName = p.StepName, StepDescription = p.StepDescription }).ToList()
+            };
+            patch.ApplyTo(pdata, ModelState);
+            if (ModelState.IsValid && TryValidateModel(pdata))
+            {
+                instruction.Description = pdata.Description;
+                context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
     }
 }
