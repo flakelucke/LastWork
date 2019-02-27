@@ -50,7 +50,6 @@ export class Repository {
     deleteInstruction(id: number) {
         this.sendRequest(RequestMethod.Delete, instructionsUrl + "/" + id)
             .subscribe(() => {
-                console.log(1);
                this.getInstructions();
             });
     }

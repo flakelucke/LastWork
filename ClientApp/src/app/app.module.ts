@@ -10,7 +10,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { InstructionTableComponent } from './structure/instruction-table/instruction-table.component';
 import { InstructionDetailComponent } from './structure/instruction-detail/instruction-detail.component';
 import { RoutingConfig } from './app.routing';
-import { PaginationComponent } from './pagination/pagination.component';
+import { AdminModule } from "./admin/admin.module";
+import { PaginationComponent } from "./structure/pagination/pagination.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { PaginationComponent } from './pagination/pagination.component';
     FormsModule,
     ModelModule,
     HttpModule,
-    RoutingConfig
+    RoutingConfig,
+    AdminModule
   ],
   providers: [],
   bootstrap: [AppComponent]
