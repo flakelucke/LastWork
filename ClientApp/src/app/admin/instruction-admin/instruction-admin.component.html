@@ -1,0 +1,63 @@
+<table *ngIf="tableMode; else create" class="table table-sm">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
+    </tr>
+    <tr *ngFor="let p of instructions">
+        <ng-template [ngIf]="instruction?.instructionId != p.instructionId" [ngIfElse]="edit">
+            <td>{{p.instructionId}}</td>
+            <td>{{p.instructionName}}</td>
+            <td>{{p.description}}</td>
+            <td>
+                <ol>
+                    <li *ngFor="let step of p?.steps">
+                        <p>Step Id : {{step?.instructionStepId|| 'No Data'}}</p>
+                        <p style="word-wrap: normal">Step name: {{step?.stepName || 'No Data'}}</p>
+                        <p style="word-wrap: normal">Step desctiption : {{step?.stepDescription || 'No Data'}}</p>
+                    </li>
+                </ol>
+            </td>
+            <td class="d-flex flex-row">
+                <!-- <button class="btn btn-primary btn-sm" [routerLink]="['/detail', p.instructionId]">
+                    Details
+                </button> -->
+                <button class="btn btn-sm btn-primary mr-2 " (click)="selectInstruction(p.instructionId)">Edit</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteInstruction(p.instructionId)">Delete</button>
+            </td>
+        </ng-template>
+    </tr>
+    <div class="d-flex flex-row">
+        <app-pagination-admin></app-pagination-admin>
+    </div>
+    <tfoot>
+        <tr>
+            <td colspan="6" class="text-center">
+                <button class="btn btn-primary" (click)="clearInstruction(); tableMode = false">Create</button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<ng-template #edit>
+    <td colspan="6">
+        <app-instruction-editor></app-instruction-editor>
+        <div class="text-center">
+            <button class="btn btn-sm btn-primary" (click)="saveInstruction()">
+                Save
+            </button>
+            <button class="btn btn-sm btn-info" (click)="clearInstruction()">
+                Cancel
+            </button>
+        </div>
+    </td>
+</ng-template>
+<ng-template #create>
+    <app-instruction-editor></app-instruction-editor>
+    <button class="btn btn-primary" (click)="saveInstruction()">
+        Save
+    </button>
+    <button class="btn btn-info" (click)="clearInstruction()">
+        Cancel
+    </button>
+</ng-template>
