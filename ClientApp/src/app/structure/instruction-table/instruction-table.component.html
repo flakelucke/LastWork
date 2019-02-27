@@ -1,0 +1,23 @@
+<button class="btn btn-primary m-1" (click)="createInstruction()">Create</button>
+<button class="btn btn-primary m-1" (click)="updateInstruction()">Update</button>
+<button class="btn btn-primary m-1" (click)="deleteInstruction()">Delete</button>
+<table class="table table-sm mt-4">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    <tr *ngFor="let inst of instructions">
+        <td>{{inst.instructionId}}</td>
+        <td>{{inst.instructionName}}</td>
+        <td>{{inst.description}}</td>
+        <td>
+            <button class="btn btn-primary btn-sm" [routerLink]="['/detail', inst.instructionId]">
+                Details
+            </button>
+        </td>
+    </tr>
+</table>
+<div class="d-flex flex-row">
+    <app-pagination></app-pagination>
+</div>
