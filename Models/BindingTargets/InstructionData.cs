@@ -21,7 +21,7 @@ namespace LastWork.Models.BindingTargets
         {
             InstructionName = InstructionName,
             Description = Description,
-            Steps = Steps.Select(s => s.GetInstructionStep()).ToList()
+            Steps = Steps?.Select(s => s.GetInstructionStep()).ToList() ?? null
         };
     }
 }

@@ -72,6 +72,8 @@ namespace LastWork.Controllers
             if (ModelState.IsValid && TryValidateModel(pdata))
             {
                 instruction.Description = pdata.Description;
+                instruction.InstructionName = pdata.InstructionName;
+                instruction.Steps = pdata.Steps.Select(s => s.GetInstructionStep()).ToList();
                 context.SaveChanges();
                 return Ok();
             }
