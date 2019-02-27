@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+using LastWork.Models.InstructionSteps;
+
 namespace LastWork.Models.BindingTargets
 {
     public class InstructionStepData
@@ -6,8 +9,13 @@ namespace LastWork.Models.BindingTargets
         public string StepName { get; set; }
         [Required]
         public string StepDescription { get; set; }
-        public InstructionStep InstructionStep => new InstructionStep {
-        StepName = StepName, StepDescription = StepDescription
-        };
+        public InstructionStep GetInstructionStep()
+        {
+            return new InstructionStep
+            {
+                StepName = StepName,
+                StepDescription = StepDescription
+            };
+        }
     }
 }

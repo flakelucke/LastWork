@@ -7,18 +7,26 @@ import { ModelModule } from "./models/model.module";
 import { AppComponent } from './app.component';
 import { HttpModule } from '@angular/http';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { InstructionTableComponent } from './structure/instruction-table/instruction-table.component';
+import { InstructionDetailComponent } from './structure/instruction-detail/instruction-detail.component';
+import { RoutingConfig } from './app.routing';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    InstructionTableComponent,
+    InstructionDetailComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ModelModule,
-    HttpModule
+    HttpModule,
+    RoutingConfig
   ],
   providers: [],
   bootstrap: [AppComponent]

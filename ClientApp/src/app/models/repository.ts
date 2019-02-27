@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs";
 import "rxjs/add/operator/map";
+import { Pagination } from "./config-classes.repository";
 
 const instructionsUrl = "/api/instructions";
 
@@ -10,14 +11,22 @@ const instructionsUrl = "/api/instructions";
 export class Repository {
      instruction: Instruction;
      instructions: Instruction[];
+    private paginationObject = new Pagination();
 
     constructor(private http: Http) {
         this.getInstructions();
     }
 
+    get pagination(): Pagination {
+        return this.paginationObject;
+    }
+
     getInstructions() {
         this.sendRequest(RequestMethod.Get, instructionsUrl)
-        .subscribe(response => { this.instructions = response })
+        .subscribe(response => { 
+            this.instructions = response;
+            this.pagination.currentPage = 1;
+        })
     }
 
     getInstruction(id: number) {
@@ -44,6 +53,14 @@ export class Repository {
                 console.log(1);
                this.getInstructions();
             });
+    }
+
+    updateInstruction(id: number, changes: Map<string, any>) {
+        let patch = [];
+        changes.forEach((value, key) =>
+            patch.push({ op: "replace", path: key, value: value }));
+        this.sendRequest(RequestMethod.Patch, instructionsUrl + "/" + id, patch)
+            .subscribe(response => this.getInstructions());
     }
 
     private sendRequest(verb: RequestMethod, url: string,

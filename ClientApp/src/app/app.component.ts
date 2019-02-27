@@ -21,15 +21,5 @@ export class AppComponent {
   get instructions(): Instruction[] {
     return this.repository.instructions;
   }
-
-   deleteInstruction() {
-    this.repository.deleteInstruction(this.repository.instructions[0].instructionId);
-    }
-
-  createInstruction() {
-    this.repository.createInstruction(new Instruction(0, "new instr", "See what the fish are hiding"
-      , [new Step(1, "kolya", "second"), new Step(2, "kolya", "second")]
-    ));
-
-  }
+  
 }

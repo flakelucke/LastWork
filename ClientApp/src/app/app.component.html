@@ -1,33 +1,4 @@
-<app-nav-menu></app-nav-menu>
-<table class="table table-sm mt-4">
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Steps</th>
-    </tr>
-    <tr *ngFor="let inst of instructions">
-        <td>{{inst.instructionName}}</td>
-        <td>{{inst.description}}</td>
-        <td >
-            <ol>
-                <li *ngFor="let step of inst.steps">
-                    <p>Step name: {{step.stepName}}</p>
-                    <p>Step desctiption : {{step.stepDescription}}</p>
-                </li>
-            </ol>
-        </td>
-    </tr>
-</table>
-<!-- <ul class="list-group">
-    <li *ngFor="let inst of instructions" class="list-group-item">
-        <p>Instruction Id : {{inst.instructionId}}</p>
-        <p>Instruction name : <a href="#">{{inst.instructionName}}</a></p>
-        <p>Instruction description : {{inst.description}}</p>
-        <ul class="list-group">
-            <li *ngFor="let step of inst.steps" class="list-group-item">
-                <p>Step name: {{step.stepName}}</p>
-                <p>Step desctiption : {{step.stepDescription}}</p>
-            </li>
-        </ul>
-    </li>
-</ul> -->
+<div class="container">
+        <app-nav-menu></app-nav-menu>
+        <router-outlet></router-outlet>
+</div>
