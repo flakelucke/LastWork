@@ -1,0 +1,28 @@
+<table class="table">
+    <tr>
+        <th colspan="2" class="">Instruction</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td>{{instruction?.instructionName || 'No Data'}}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{instruction?.description || 'No Data'}}</td>
+    </tr>
+    <tr>
+        <th colspan="2" class="">Steps</th>
+    </tr>
+    <td>
+        <ol>
+            <li *ngFor="let step of instruction?.steps">
+                <p>Step Id : {{step?.instructionStepId|| 'No Data'}}</p>
+                <p>Step name: {{step?.stepName || 'No Data'}}</p>
+                <p>Step desctiption : {{step?.stepDescription || 'No Data'}}</p>
+            </li>
+        </ol>
+    </td>
+</table>
+<div class="text-center">
+    <button class="btn btn-primary" routerLink="/table">Back</button>
+</div>
