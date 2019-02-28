@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace LastWork.Controllers
 {
@@ -18,16 +19,34 @@ namespace LastWork.Controllers
     {
         private IInstructionRepository repository;
         private DataContext context;
-        public IntructionValuesController(IInstructionRepository repository, DataContext context)
+        // private readonly IdentityDataContext ctx;
+
+        // public UserManager<IdentityUser> UserManager { get; }
+        // public RoleManager<IdentityRole> RoleManager { get; }
+        public IntructionValuesController(IInstructionRepository repository,
+                    DataContext context
+                    // UserManager<IdentityUser> userManager,
+                    // RoleManager<IdentityRole> roleManager,
+                    // IdentityDataContext ctx
+                    )
         {
             this.repository = repository;
             this.context = context;
+            // UserManager = userManager;
+            // RoleManager = roleManager;
+            // this.ctx = ctx;
+        }
+
+        [Authorize]
+        public string Protected() {
+            return "You have been authenticated";
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IEnumerable<Instruction>> GetAllInstruction()
         {
+            // IdentitySeedData.SeedDatabase(UserManager,RoleManager,ctx);
             return await repository.GetAllInstructions();
         }
 
@@ -52,7 +71,7 @@ namespace LastWork.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(long id)
+        public async Task<IActionResult> DeleteInstruction(long id)
         {
             await repository.DeleteInstruction(id);
             return Ok();
@@ -80,12 +99,12 @@ namespace LastWork.Controllers
 
                 instruction.Description = pdata.Description;
                 instruction.InstructionName = pdata.InstructionName;
-                if (pdataStepCount<instrStepCount)
-                instruction.Steps.RemoveRange(pdataStepCount-1,instrStepCount-pdataStepCount);
-                
+                if (pdataStepCount < instrStepCount)
+                    instruction.Steps.RemoveRange(pdataStepCount - 1, instrStepCount - pdataStepCount);
+
                 for (int i = 0; i < pdataStepCount; i++)
                 {
-                    if (i > instrStepCount-1)
+                    if (i > instrStepCount - 1)
                         instruction.Steps.Add(
                             new InstructionStep
                             {
