@@ -8,10 +8,12 @@ using LastWork.Models.BindingTargets;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LastWork.Controllers
 {
     [Route("api/instructions")]
+    [Authorize(Roles = "Administrator")]
     public class IntructionValuesController : Controller
     {
         private IInstructionRepository repository;
@@ -23,12 +25,14 @@ namespace LastWork.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IEnumerable<Instruction>> GetAllInstruction()
         {
             return await repository.GetAllInstructions();
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetInstruction(long id)
         {
             return Ok(await repository.FindInstructionByIdAsync(id.ToString()));
@@ -66,14 +70,34 @@ namespace LastWork.Controllers
                 InstructionName = instruction.InstructionName,
                 Description = instruction.Description,
                 Steps = instruction.Steps.Select(p => new InstructionStepData
-                { StepName = p.StepName, StepDescription = p.StepDescription }).ToList()
+                { InstructionStepId = p.InstructionStepId, StepName = p.StepName, StepDescription = p.StepDescription }).ToList()
             };
             patch.ApplyTo(pdata, ModelState);
             if (ModelState.IsValid && TryValidateModel(pdata))
             {
+                int pdataStepCount = pdata.Steps.Count;
+                int instrStepCount = instruction.Steps.Count;
+
                 instruction.Description = pdata.Description;
                 instruction.InstructionName = pdata.InstructionName;
-                instruction.Steps = pdata.Steps.Select(s => s.GetInstructionStep()).ToList();
+                if (pdataStepCount<instrStepCount)
+                instruction.Steps.RemoveRange(pdataStepCount-1,instrStepCount-pdataStepCount);
+                
+                for (int i = 0; i < pdataStepCount; i++)
+                {
+                    if (i > instrStepCount-1)
+                        instruction.Steps.Add(
+                            new InstructionStep
+                            {
+                                StepName = pdata.Steps[i].StepName,
+                                StepDescription = pdata.Steps[i].StepDescription
+                            });
+                    else
+                    {
+                        instruction.Steps[i].StepDescription = pdata.Steps[i].StepDescription;
+                        instruction.Steps[i].StepName = pdata.Steps[i].StepName;
+                    }
+                }
                 context.SaveChanges();
                 return Ok();
             }

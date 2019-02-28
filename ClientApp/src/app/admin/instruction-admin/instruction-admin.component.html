@@ -20,10 +20,7 @@
                 </ol>
             </td>
             <td class="d-flex flex-row">
-                <!-- <button class="btn btn-primary btn-sm" [routerLink]="['/detail', p.instructionId]">
-                    Details
-                </button> -->
-                <button class="btn btn-sm btn-primary mr-2 " (click)="selectInstruction(p.instructionId)">Edit</button>
+                <button class="btn btn-sm btn-primary mr-2 " (click)="selectInstruction(p.instructionId); tableMode = false">Edit</button>
                 <button class="btn btn-sm btn-danger" (click)="deleteInstruction(p.instructionId)">Delete</button>
             </td>
         </ng-template>

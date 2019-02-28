@@ -12,10 +12,12 @@
     <ul class="list-group">
       <li *ngFor="let s of instruction.steps" class="list-group-item">
         <label>Step name</label>
-        <input class="form-control" [(ngModel)]="s.stepName" />
+        <input class="form-control" [(ngModel)]="s.stepName"/>
         <label>Step description</label>
-        <input class="form-control" [(ngModel)]="s.stepDescription" />
+        <input class="form-control" [(ngModel)]="s.stepDescription"/>
+        <button class="btn btn-sm btn-danger" (click)="deleteStep(s)">Delete step</button>
       </li>
+      
     </ul>
   </div>
   <button class="btn btn-sm btn-primary" (click)="addStep()">

@@ -21,6 +21,10 @@ export class InstructionEditorComponent implements OnInit {
       }
       else this.repo.instruction.steps.push(new Step());
     }
+    deleteStep(step: Step) 
+    {
+      this.repo.instruction.steps.splice(this.repo.instruction.steps.indexOf(step),1);
+    }
   ngOnInit() {
   }
 

@@ -5,6 +5,7 @@ namespace LastWork.Models.BindingTargets
 {
     public class InstructionStepData
     {
+        public long InstructionStepId {get; set;}
         [Required]
         public string StepName { get; set; }
         [Required]

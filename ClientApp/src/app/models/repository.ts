@@ -66,7 +66,8 @@ export class Repository {
         data?: any): Observable<any> {
         return this.http.request(new Request({
             method: verb, url: url, body: data
-        })).map(response => {
+        }))
+        .map(response => {
             return response.headers.get("Content-Length") != "0"
                 ? response.json() : null;
         });
