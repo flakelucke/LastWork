@@ -9,8 +9,8 @@ const instructionsUrl = "/api/instructions";
 
 @Injectable()
 export class Repository {
-     instruction: Instruction;
-     instructions: Instruction[];
+    instruction: Instruction;
+    instructions: Instruction[];
     private paginationObject = new Pagination();
 
     constructor(private http: Http) {
@@ -23,10 +23,10 @@ export class Repository {
 
     getInstructions() {
         this.sendRequest(RequestMethod.Get, instructionsUrl)
-        .subscribe(response => { 
-            this.instructions = response;
-            this.pagination.currentPage = 1;
-        })
+            .subscribe(response => {
+                this.instructions = response;
+                this.pagination.currentPage = 1;
+            })
     }
 
     getInstruction(id: number) {
@@ -38,7 +38,7 @@ export class Repository {
 
         let data = {
             instructionName: instr.instructionName, description: instr.description
-            ,steps: instr.steps
+            , steps: instr.steps
         };
         this.sendRequest(RequestMethod.Post, instructionsUrl, data)
             .subscribe(response => {
@@ -50,7 +50,7 @@ export class Repository {
     deleteInstruction(id: number) {
         this.sendRequest(RequestMethod.Delete, instructionsUrl + "/" + id)
             .subscribe(() => {
-               this.getInstructions();
+                this.getInstructions();
             });
     }
 
@@ -62,14 +62,27 @@ export class Repository {
             .subscribe(response => this.getInstructions());
     }
 
+    login(name: string, password: string): Observable<Response> {
+        return this.http.post("/api/account/login",
+            { name: name, password: password });
+    }
+    logout() {
+        this.http.post("/api/account/logout", null).subscribe(respone => { });
+    }
+
+    registration(email: string, password: string): Observable<Response> {
+        return this.http.post("/api/account/register",
+            { email: email, password: password });
+    }
+
     private sendRequest(verb: RequestMethod, url: string,
         data?: any): Observable<any> {
         return this.http.request(new Request({
             method: verb, url: url, body: data
         }))
-        .map(response => {
-            return response.headers.get("Content-Length") != "0"
-                ? response.json() : null;
-        });
+            .map(response => {
+                return response.headers.get("Content-Length") != "0"
+                    ? response.json() : null;
+            });
     }
 }
