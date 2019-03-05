@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../auth/authentication.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,7 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(public authService: AuthenticationService) { }
+
+  admin: string = localStorage.getItem("admin");
+
+  public get authenticated() :boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  public get isAdmin() : boolean {
+    return this.authService.isAdmin();
+  }
 
   ngOnInit() {
   }

@@ -1,6 +1,19 @@
-<nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-</nav>
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+  <ul class="navbar-nav mr-auto d-flex ">
+    <li class="nav-item">
+      <a class="navbar-brand" routerLink="/">Home</a>
+    </li>
+    <li class="nav-item" *ngIf="isAdmin">
+      <a class="navbar-brand" routerLink="/admin">Admin panel</a>
+    </li>
+  </ul>
+  <ng-template [ngIf]="!authenticated" [ngIfElse]="logout">
+      <button class="btn btn-sm btn-warning" routerLink="/login">
+        Login
+      </button>
+    </ng-template>
+  <ng-template #logout>
+      <button class="btn btn-sm btn-warning" (click)="authService.logout()">
+        Log Out
+      </button>
+    </ng-template>
