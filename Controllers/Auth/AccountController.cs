@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using LastWork.Models;
+using LastWork.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,34 +10,36 @@ namespace LastWork.Auth.Controllers
 {
     public class AccountController : Controller
     {
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
+        private UserManager<User> userManager;
+        private SignInManager<User> signInManager;
+        private RoleManager<IdentityRole> role;
 
-        public AccountController(UserManager<IdentityUser> userMrg,
-                                    SignInManager<IdentityUser> signInMgr)
+        public AccountController(UserManager<User> userMrg,
+                                    SignInManager<User> signInMgr,RoleManager<IdentityRole> role)
         {
             userManager = userMrg;
             signInManager = signInMgr;
+            this.role = role;
         }
 
         [HttpPost("/api/account/login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel creds)
         {
-            IdentityUser user = await userManager.FindByNameAsync(creds.Name);
+            User user = await userManager.FindByNameAsync(creds.Name);
             if (ModelState.IsValid && await DoLogin(creds))
             {
                 if (await userManager.IsEmailConfirmedAsync(user))
                 {
-                    if (await userManager.IsInRoleAsync(user, "Administrator"))
+                    if (await userManager.IsInRoleAsync(user, "administrator"))
                     {
-                        return Ok("admin");
+                        return Ok($"admin+{user.Id}");
                     }
-                    else return Ok("user");
+                    else return Ok($"user +{user.Id}");
                 }
                 else
-                return Ok("confim email");
+                    BadRequest();
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         [HttpPost("/api/account/logout")]
         public async Task<IActionResult> Logout()
@@ -48,13 +51,14 @@ namespace LastWork.Auth.Controllers
         [HttpPost("/api/account/register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel creds)
         {
-
+            var k = role.Roles;
             if (ModelState.IsValid)
             {
-                IdentityUser user = new IdentityUser { Email = creds.Email, UserName = creds.Email };
+                User user = new User { Email = creds.Email, UserName = creds.Email };
                 IdentityResult result = await userManager.CreateAsync(user, creds.Password);
                 if (result.Succeeded)
                 {
+                    await userManager.AddToRoleAsync(user,"user");
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
                     var callbackUrl = Url.Action(
@@ -70,9 +74,9 @@ namespace LastWork.Auth.Controllers
                     await userManager.AddToRoleAsync(user, "user");
                     return Ok();
                 }
-                return BadRequest();
+                return BadRequest(result);
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
         [HttpGet]
@@ -97,7 +101,7 @@ namespace LastWork.Auth.Controllers
 
         private async Task<bool> DoLogin(LoginViewModel creds)
         {
-            IdentityUser user = await userManager.FindByNameAsync(creds.Name);
+            User user = await userManager.FindByNameAsync(creds.Name);
             if (user != null)
             {
                 await signInManager.SignOutAsync();
@@ -113,14 +117,6 @@ namespace LastWork.Auth.Controllers
     {
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string Password { get; set; }
-    }
-
-    public class RegisterViewModel
-    {
-        [Required]
-        public string Email { get; set; }
         [Required]
         public string Password { get; set; }
     }
