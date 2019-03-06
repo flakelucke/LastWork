@@ -9,6 +9,7 @@ namespace LastWork.Models.Users
         Task DeleteUserAsync(long id);
         Task<IList<User>> GetAllUsersAsync(); 
         Task<IList<User>> GetAllAdminsAsync(); 
+        Task<User> FindUserById(string id);
         Task GiveAdminToUser(long id);
     }
 }
