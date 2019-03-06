@@ -1,23 +1,29 @@
-<!-- <button class="btn btn-primary m-1" (click)="createInstruction()">Create</button>
-<button class="btn btn-primary m-1" (click)="updateInstruction()">Update</button>
-<button class="btn btn-primary m-1" (click)="deleteInstruction()">Delete</button> -->
-<table class="table table-sm mt-4">
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-    </tr>
-    <tr *ngFor="let inst of instructions">
-        <td>{{inst.instructionId}}</td>
-        <td>{{inst.instructionName}}</td>
-        <td>{{inst.description}}</td>
-        <td>
-            <button class="btn btn-primary btn-sm" [routerLink]="['/detail', inst.instructionId]">
-                Details
-            </button>
-        </td>
-    </tr>
-</table>
-<div class="d-flex flex-row">
-    <app-pagination></app-pagination>
+<div *ngIf="tableMode; else create" class="d-flex flex-column ml-3 mt-3">
+    <button class="btn btn-primary" (click)="clearInstruction(); tableMode = false" style="width: 200px">Create</button>
+    <div *ngFor="let p of instructions">
+        <ng-template class="d-flex flex-row" [ngIf]="instruction?.instructionId != p.instructionId" [ngIfElse]="edit">
+            <div>
+                <h1 class="card-title" style="word-wrap: break-word">Name: {{p.instructionName}}</h1>
+                <p class="card-text" style="word-wrap: break-word">Description: {{p.description}}</p>
+                <p style="word-wrap: break-word">{{p.creatorId}}</p>
+            </div>
+            <div class="d-flex flex-row">
+                <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/detail', p.instructionId]">
+                    Details
+                </button>
+            </div>
+        </ng-template>
+    </div>
+    <div class="d-flex flex-row">
+        <app-pagination></app-pagination>
+    </div>
 </div>
+<ng-template #create>
+    <app-instruction-editor></app-instruction-editor>
+    <button class="btn btn-primary mr-1" (click)="createInstruction()">
+        Save
+    </button>
+    <button class="btn btn-info" (click)="clearInstruction()">
+        Cancel
+    </button>
+</ng-template>

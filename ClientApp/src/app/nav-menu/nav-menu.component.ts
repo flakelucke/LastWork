@@ -10,8 +10,6 @@ export class NavMenuComponent implements OnInit {
 
   constructor(public authService: AuthenticationService) { }
 
-  admin: string = localStorage.getItem("admin");
-
   public get authenticated() :boolean {
     return this.authService.isAuthenticated();
   }

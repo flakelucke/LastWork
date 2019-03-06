@@ -2,7 +2,7 @@
     Invalid username or password
 </h4>
 <form novalidate #authForm="ngForm">
-    <div class="form-group">
+    <div class="form-group mt-3">
         <label>Name:</label>
         <input #name="ngModel" name="name" class="form-control" [(ngModel)]="authService.name" required />
         <div *ngIf="name.invalid" class="text-danger">

@@ -12,7 +12,16 @@ import { Step } from 'src/app/models/step-model/step.model';
 export class InstructionTableComponent implements OnInit {
 
   constructor(private repository: Repository,
-    private router: Router) { }
+    private router: Router) {
+    this.repository.getInstructions();
+  }
+
+  tableMode: boolean;
+
+  clearInstruction() {
+    this.repository.instruction = new Instruction();
+    this.tableMode = true;
+  }
 
   get instructions(): Instruction[] {
     if (this.repository.instructions != null && this.repository.instructions.length > 0) {
@@ -23,22 +32,12 @@ export class InstructionTableComponent implements OnInit {
     return this.repository.instructions;
   }
 
-  updateInstruction() {
-    let changes = new Map<string, any>();
-    changes.set("Description", "Green Kayak");
-    this.repository.updateInstruction(this.repository.instructions[0].instructionId, changes);
-  }
-
-  deleteInstruction() {
-    this.repository.deleteInstruction(this.repository.instructions[0].instructionId);
-  }
-
   createInstruction() {
-    this.repository.createInstruction(new Instruction(0, "new instr", "See what the fish are hiding"
-      , [new Step(1, "kolya", "second"), new Step(2, "kolya", "second")]
-    ));
+    this.repository.createInstruction(this.repository.instruction,localStorage.getItem("userId"));
+    this.clearInstruction();
   }
   ngOnInit() {
+    this.tableMode = true;
   }
 
 }

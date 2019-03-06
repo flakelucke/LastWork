@@ -4,7 +4,6 @@ import { Observable } from "rxjs/Observable";
 import { Router } from "@angular/router";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
-import { Body } from "@angular/http/src/body";
 
 @Injectable()
 export class AuthenticationService {
@@ -20,11 +19,11 @@ export class AuthenticationService {
             .map(response => {
                 if (response.ok) {
                     this.authenticated = true;
-                    if (response.text()=="admin")
+                    if (response.text().indexOf("admin")>-1)
                     localStorage.setItem("admin", response.text());
                     else localStorage.setItem("user",response.text());
                     this.password = null;
-                    console.log(this.callbackUrl);
+                    localStorage.setItem("userId",response.text().slice(6));
                     this.router.navigateByUrl(this.callbackUrl || "/table");
                 }
                 return this.authenticated;
@@ -42,5 +41,17 @@ export class AuthenticationService {
         localStorage.removeItem("user");
         this.repo.logout();
         this.router.navigateByUrl("/login");
+    }
+
+    public isAuthenticated() : boolean {
+        if (localStorage.getItem("user") || localStorage.getItem("admin"))
+        return true;
+        else return false;
+    }
+
+    public isAdmin():boolean {
+        if (localStorage.getItem("admin"))
+        return true;
+        return false;
     }
 }

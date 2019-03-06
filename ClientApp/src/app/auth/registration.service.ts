@@ -9,14 +9,12 @@ import "rxjs/add/operator/catch";
 export class RegistrationService {
     constructor(private repo: Repository,
                 private router: Router) { }
-    authenticated: boolean = false;
     registered: boolean = false;
     email: string;
     password: string;
     callbackUrl: string;
 
     registration() : Observable<boolean> {
-        this.authenticated = false;
         return this.repo.registration(this.email, this.password)
             .map(response => {
                 if (response.ok) {

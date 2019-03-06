@@ -4,21 +4,30 @@ import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs";
 import "rxjs/add/operator/map";
 import { Pagination } from "./config-classes.repository";
+import { User } from "./user-model/user.model";
 
+const userUrl = "/api/users";
 const instructionsUrl = "/api/instructions";
 
 @Injectable()
 export class Repository {
     instruction: Instruction;
     instructions: Instruction[];
+    users: User[];
     private paginationObject = new Pagination();
 
-    constructor(private http: Http) {
-        this.getInstructions();
-    }
+    constructor(private http: Http) {}
 
     get pagination(): Pagination {
         return this.paginationObject;
+    }
+
+    getUsers() {
+        this.sendRequest(RequestMethod.Get, userUrl+"/users")
+        .subscribe(res => {
+            this.users = res;
+            this.pagination.currentPage = 1;
+        })
     }
 
     getInstructions() {
@@ -34,11 +43,10 @@ export class Repository {
             .subscribe(response => { this.instruction = response; });
     }
 
-    createInstruction(instr: Instruction) {
-
+    createInstruction(instr: Instruction,id:string) {
         let data = {
             instructionName: instr.instructionName, description: instr.description
-            , steps: instr.steps
+            , steps: instr.steps, creatorId : id
         };
         this.sendRequest(RequestMethod.Post, instructionsUrl, data)
             .subscribe(response => {
@@ -74,6 +82,8 @@ export class Repository {
         return this.http.post("/api/account/register",
             { email: email, password: password });
     }
+
+
 
     private sendRequest(verb: RequestMethod, url: string,
         data?: any): Observable<any> {
