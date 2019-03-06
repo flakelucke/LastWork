@@ -24,13 +24,14 @@ export class InstructionAdminComponent implements OnInit {
     }
     saveInstruction() {
         if (this.repo.instruction.instructionId == null) {
-            this.repo.createInstruction(this.repo.instruction,localStorage.getItem("userId"));
+          this.repo.getUser(localStorage.getItem("userId"));
+            this.repo.createInstruction(this.repo.instruction);
         } else {
             let changes = new Map<string, any>();
             changes.set("Description", this.repo.instruction.description);
             changes.set("InstructionName", this.repo.instruction.instructionName);
             changes.set("Steps",this.repo.instruction.steps);
-            changes.set("CreatorId",this.repo.instruction.creatorId);
+            changes.set("User",this.repo.instruction.user);
             this.repo.updateInstruction(this.repo.instruction.instructionId,changes);
         }
         this.clearInstruction();
