@@ -33,7 +33,8 @@ export class InstructionTableComponent implements OnInit {
   }
 
   createInstruction() {
-    this.repository.createInstruction(this.repository.instruction,localStorage.getItem("userId"));
+    // this.repository.getUser(localStorage.getItem("userId"));
+    this.repository.createInstruction(this.repository.instruction);
     this.clearInstruction();
   }
   ngOnInit() {

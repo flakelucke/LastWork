@@ -26,6 +26,7 @@ namespace LastWork.Models.Users
 
         public async Task<IList<User>> GetAllUsersAsync()
         {        
+            var k =await userManager.FindByEmailAsync("kolyamyalik0@gmail.com");
             return await userManager.GetUsersInRoleAsync("user");
         }
 
@@ -34,11 +35,17 @@ namespace LastWork.Models.Users
             return await userManager.GetUsersInRoleAsync("administrator");
         }
 
+        
         public async Task GiveAdminToUser(long id)
         {
             var user = await userManager.FindByIdAsync(id.ToString());
-            await userManager.RemoveFromRoleAsync(user,"user");
             await userManager.AddToRoleAsync(user, "administrator");
+        }
+
+        public async Task<User> FindUserById(string id)
+        {
+            var k = await userManager.FindByIdAsync(id);
+            return await userManager.FindByIdAsync(id);
         }
     }
 }

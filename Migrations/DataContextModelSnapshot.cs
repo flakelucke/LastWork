@@ -44,13 +44,15 @@ namespace LastWork.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatorId");
-
                     b.Property<string>("Description");
 
                     b.Property<string>("InstructionName");
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("InstructionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Instructions");
                 });
@@ -224,6 +226,13 @@ namespace LastWork.Migrations
                         .WithMany("Steps")
                         .HasForeignKey("InstructionId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LastWork.Models.Instructions.Instruction", b =>
+                {
+                    b.HasOne("LastWork.Models.Users.User", "User")
+                        .WithMany("Instructions")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
