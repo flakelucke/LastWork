@@ -14,20 +14,28 @@ export class Repository {
     instruction: Instruction;
     instructions: Instruction[];
     users: User[];
+    user: User;
     private paginationObject = new Pagination();
 
-    constructor(private http: Http) {}
+    constructor(private http: Http) { 
+        this.getUser(localStorage.getItem("userId"));
+    }
 
     get pagination(): Pagination {
         return this.paginationObject;
     }
+    
+    getUser(id: string) {
+        this.sendRequest(RequestMethod.Get, userUrl + "/" + id)
+            .subscribe(response => { this.user = response; });
+    }
 
     getUsers() {
-        this.sendRequest(RequestMethod.Get, userUrl+"/users")
-        .subscribe(res => {
-            this.users = res;
-            this.pagination.currentPage = 1;
-        })
+        this.sendRequest(RequestMethod.Get, userUrl + "/users")
+            .subscribe(res => {
+                this.users = res;
+                this.pagination.currentPage = 1;
+            })
     }
 
     getInstructions() {
@@ -43,10 +51,10 @@ export class Repository {
             .subscribe(response => { this.instruction = response; });
     }
 
-    createInstruction(instr: Instruction,id:string) {
+    createInstruction(instr: Instruction) {
         let data = {
             instructionName: instr.instructionName, description: instr.description
-            , steps: instr.steps, creatorId : id
+            , steps: instr.steps, user: this.user
         };
         this.sendRequest(RequestMethod.Post, instructionsUrl, data)
             .subscribe(response => {
