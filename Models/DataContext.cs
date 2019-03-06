@@ -10,14 +10,34 @@ namespace LastWork.Models
     public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> opts)
-            : base(opts) {}
+            : base(opts) { }
         public DbSet<Instruction> Instructions { get; set; }
         public DbSet<InstructionStep> Steps { get; set; }
+        public User User {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Instruction>().HasMany<InstructionStep>(x => x.Steps)
                 .WithOne().OnDelete(DeleteBehavior.Cascade);
+            // modelBuilder.Entity<Instruction>().HasOne<User>()
+            // .WithMany().OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+             .HasMany(e=>e.Instructions)
+             .WithOne("User")
+             .HasForeignKey("InstructionId");
+
+            modelBuilder.Entity<Instruction>()
+             .HasOne(x=>x.User)
+             .WithMany("Instructions")
+             .HasForeignKey("UserId")
+             .HasPrincipalKey("Id");
+
+            // modelBuilder.Entity<User>().HasMany("Instruction")
+            //     .WithOne("User")
+            //     .HasForeignKey("InstructionId");
+
         }
     }
 }
