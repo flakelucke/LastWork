@@ -58,9 +58,7 @@ namespace LastWork.Auth.Controllers
                 IdentityResult result = await userManager.CreateAsync(user, creds.Password);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user,"user");
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
-
                     var callbackUrl = Url.Action(
                     "ConfirmEmail",
                     "Account",

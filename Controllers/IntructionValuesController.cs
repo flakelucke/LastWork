@@ -10,43 +10,35 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using LastWork.Models.Users;
 
 namespace LastWork.Controllers
 {
     [Route("api/instructions")]
-    [Authorize(Roles = "Administrator")]
+    [Authorize]
     public class IntructionValuesController : Controller
     {
         private IInstructionRepository repository;
         private DataContext context;
-        // private readonly IdentityDataContext ctx;
-
-        // public UserManager<IdentityUser> UserManager { get; }
-        // public RoleManager<IdentityRole> RoleManager { get; }
+        RoleManager<IdentityRole> role;
+        UserManager<User> user;
         public IntructionValuesController(IInstructionRepository repository,
-                    DataContext context
-                    // UserManager<IdentityUser> userManager,
-                    // RoleManager<IdentityRole> roleManager,
-                    // IdentityDataContext ctx
+                    DataContext context,
+                    RoleManager<IdentityRole> role,
+                    UserManager<User> user
                     )
         {
             this.repository = repository;
             this.context = context;
-            // UserManager = userManager;
-            // RoleManager = roleManager;
-            // this.ctx = ctx;
-        }
-
-        [Authorize]
-        public string Protected() {
-            return "You have been authenticated";
+            this.role = role;
+            this.user = user;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IEnumerable<Instruction>> GetAllInstruction()
         {
-            // IdentitySeedData.SeedDatabase(UserManager,RoleManager,ctx);
             return await repository.GetAllInstructions();
         }
 
@@ -54,6 +46,8 @@ namespace LastWork.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetInstruction(long id)
         {
+            // await role.CreateAsync(new IdentityRole("administrator"));
+            // await role.CreateAsync(new IdentityRole("user"));
             return Ok(await repository.FindInstructionByIdAsync(id.ToString()));
         }
         [HttpPost]
@@ -99,8 +93,12 @@ namespace LastWork.Controllers
 
                 instruction.Description = pdata.Description;
                 instruction.InstructionName = pdata.InstructionName;
+                instruction.CreatorId = pdata.CreatorId;
                 if (pdataStepCount < instrStepCount)
-                    instruction.Steps.RemoveRange(pdataStepCount - 1, instrStepCount - pdataStepCount);
+                    if (pdataStepCount == 0)
+                        instruction.Steps.RemoveRange(0, instrStepCount );
+                    else
+                        instruction.Steps.RemoveRange(pdataStepCount - 1, instrStepCount - pdataStepCount);
 
                 for (int i = 0; i < pdataStepCount; i++)
                 {
