@@ -12,6 +12,7 @@ import { InstructionDetailComponent } from './structure/instruction-detail/instr
 import { RoutingConfig } from './app.routing';
 import { AdminModule } from "./admin/admin.module";
 import { PaginationComponent } from "./structure/pagination/pagination.component";
+import { AuthModule } from "./auth/auth.module";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PaginationComponent } from "./structure/pagination/pagination.component
     ModelModule,
     HttpModule,
     RoutingConfig,
-    AdminModule
+    AdminModule,
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]

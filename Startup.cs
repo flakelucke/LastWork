@@ -1,9 +1,14 @@
+using System;
+using System.Threading.Tasks;
 using LastWork.Models;
 using LastWork.Models.Instructions;
 using LastWork.Models.InstructionSteps;
+using LastWork.Models.Users;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -24,14 +29,20 @@ namespace LastWork
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<DataContext>(options =>
                         options.UseSqlServer(Configuration["Data:Flake:ConnectionString"]));
             // In production, the Angular files will be served from this directory
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>()
+                    .AddDefaultTokenProviders();
+
             services.AddTransient<IInstructionRepository, DataInstructionRepository>();
             services.AddTransient<IStepRepository, DataStepRepository>();
+            services.AddTransient<IUserRepository, DataUserRepository>();
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -55,6 +66,7 @@ namespace LastWork
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
@@ -76,9 +88,6 @@ namespace LastWork
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-
-            // SeedData.SeedDatabase(app.ApplicationServices
-            //     .GetRequiredService<DataContext>());
         }
     }
 }

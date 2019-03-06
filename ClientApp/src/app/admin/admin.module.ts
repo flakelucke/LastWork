@@ -7,11 +7,17 @@ import { OverviewComponent } from "./overview/overview.component";
 import { InstructionAdminComponent } from "./instruction-admin/instruction-admin.component";
 import { InstructionEditorComponent } from "./instruction-editor/instruction-editor.component";
 import { PaginationAdminComponent } from "./pagination-admin/pagination-admin.component";
-
+import { UsersAdminComponent } from "./users-admin/users-admin.component";
 
 @NgModule({
     imports: [BrowserModule, RouterModule, FormsModule],
-    declarations: [AdminComponent, OverviewComponent,InstructionAdminComponent,InstructionEditorComponent,PaginationAdminComponent],
-    providers: []
+    declarations: [AdminComponent,
+        OverviewComponent,
+        InstructionAdminComponent,
+        InstructionEditorComponent,
+        PaginationAdminComponent,
+        UsersAdminComponent],
+    providers: [],
+    exports: [InstructionEditorComponent,InstructionAdminComponent]
 })
 export class AdminModule { }

@@ -1,1 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+.td-table-instr {
+    display: inline-block;
+    word-wrap:break-word;
+}
