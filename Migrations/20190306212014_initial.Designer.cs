@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LastWork.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190306125817_User")]
-    partial class User
+    [Migration("20190306212014_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

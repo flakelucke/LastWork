@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LastWork.Migrations
 {
-    public partial class Initial1 : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,21 +46,6 @@ namespace LastWork.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Instructions",
-                columns: table => new
-                {
-                    InstructionId = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    InstructionName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    CreatorId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Instructions", x => x.InstructionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,6 +155,27 @@ namespace LastWork.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Instructions",
+                columns: table => new
+                {
+                    InstructionId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    InstructionName = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Instructions", x => x.InstructionId);
+                    table.ForeignKey(
+                        name: "FK_Instructions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Steps",
                 columns: table => new
                 {
@@ -230,6 +236,11 @@ namespace LastWork.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Instructions_UserId",
+                table: "Instructions",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Steps_InstructionId",
                 table: "Steps",
                 column: "InstructionId");
@@ -259,10 +270,10 @@ namespace LastWork.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Instructions");
 
             migrationBuilder.DropTable(
-                name: "Instructions");
+                name: "AspNetUsers");
         }
     }
 }
