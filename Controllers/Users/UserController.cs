@@ -28,7 +28,7 @@ namespace LastWork.Controllers.Users
         public async Task<IList<User>> GetAllAdminsAsync() {
             return await repository.GetAllAdminsAsync();
         }
-
+        
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteUserAsync(string id) {
