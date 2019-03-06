@@ -9,9 +9,13 @@ import { Instruction } from 'src/app/models/instruction-model/instruction.model'
 })
 export class InstructionAdminComponent implements OnInit {
 
-  constructor(private repo: Repository) { }
+  constructor(private repo: Repository) {
+    this.repo.getInstructions();
+    this.repo.instruction =null;
+   }
 
-  tableMode: boolean = true;
+   tableMode: boolean;
+ 
     get instruction(): Instruction {
         return this.repo.instruction;
     }
@@ -20,16 +24,16 @@ export class InstructionAdminComponent implements OnInit {
     }
     saveInstruction() {
         if (this.repo.instruction.instructionId == null) {
-            this.repo.createInstruction(this.repo.instruction);
+            this.repo.createInstruction(this.repo.instruction,localStorage.getItem("userId"));
         } else {
             let changes = new Map<string, any>();
             changes.set("Description", this.repo.instruction.description);
             changes.set("InstructionName", this.repo.instruction.instructionName);
             changes.set("Steps",this.repo.instruction.steps);
+            changes.set("CreatorId",this.repo.instruction.creatorId);
             this.repo.updateInstruction(this.repo.instruction.instructionId,changes);
         }
-        this.clearInstruction()
-        this.tableMode = true;
+        this.clearInstruction();
     }
     deleteInstruction(id: number) {
         this.repo.deleteInstruction(id);
@@ -49,6 +53,7 @@ export class InstructionAdminComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.tableMode = true;
   }
 
 }

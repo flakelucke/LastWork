@@ -10,7 +10,11 @@ import { Step } from 'src/app/models/step-model/step.model';
 })
 export class InstructionEditorComponent implements OnInit {
 
-  constructor(private repo: Repository) { }
+  id:string;
+
+  constructor(private repo: Repository) {
+    this.id = localStorage.getItem("userId");
+   }
     get instruction(): Instruction {
         return this.repo.instruction;
     }
