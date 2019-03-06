@@ -38,7 +38,7 @@ namespace LastWork.Controllers
         [HttpGet]
         [AllowAnonymous]
         public async Task<IEnumerable<Instruction>> GetAllInstruction()
-        {
+        {   
             return await repository.GetAllInstructions();
         }
 
@@ -77,11 +77,13 @@ namespace LastWork.Controllers
         {
             Instruction instruction = context.Instructions
                         .Include(p => p.Steps)
+                        .Include(p=>p.User)
                                 .FirstOrDefault(p => p.InstructionId == id);
             InstructionData pdata = new InstructionData
             {
                 InstructionName = instruction.InstructionName,
                 Description = instruction.Description,
+                User = instruction.User,
                 Steps = instruction.Steps.Select(p => new InstructionStepData
                 { InstructionStepId = p.InstructionStepId, StepName = p.StepName, StepDescription = p.StepDescription }).ToList()
             };
@@ -93,7 +95,7 @@ namespace LastWork.Controllers
 
                 instruction.Description = pdata.Description;
                 instruction.InstructionName = pdata.InstructionName;
-                instruction.CreatorId = pdata.CreatorId;
+                instruction.User = pdata.User;
                 if (pdataStepCount < instrStepCount)
                     if (pdataStepCount == 0)
                         instruction.Steps.RemoveRange(0, instrStepCount );
