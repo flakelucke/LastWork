@@ -24,7 +24,6 @@ export class InstructionAdminComponent implements OnInit {
     }
     saveInstruction() {
         if (this.repo.instruction.instructionId == null) {
-          this.repo.getUser(localStorage.getItem("userId"));
             this.repo.createInstruction(this.repo.instruction);
         } else {
             let changes = new Map<string, any>();
