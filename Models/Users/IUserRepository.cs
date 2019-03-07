@@ -6,10 +6,10 @@ namespace LastWork.Models.Users
 {
     public interface IUserRepository
     {
-        Task DeleteUserAsync(long id);
+        Task DeleteUserAsync(string id);
         Task<IList<User>> GetAllUsersAsync(); 
         Task<IList<User>> GetAllAdminsAsync(); 
         Task<User> FindUserById(string id);
-        Task GiveAdminToUser(long id);
+        Task GiveAdminToUser(string id);
     }
 }

@@ -22,10 +22,27 @@ namespace LastWork.Models.Instructions
 
         public Task<Instruction> FindInstructionByIdAsync(string instructionId)
         {
-            return context.Instructions
+            Task<Instruction> result =  context.Instructions
                .Include(p => p.Steps)
-               .Include(x => x.User)
-               .SingleOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
+               .Include(x => x.User).ThenInclude(s => s.Instructions)
+               .FirstOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
+
+            if (result != null)
+            {
+
+                if (result.Result.User != null)
+                {
+                    result.Result.User.Instructions = result.Result.User.Instructions.Select(p =>
+                    new Instruction
+                    {
+                        InstructionId = p.InstructionId,
+                        InstructionName = p.InstructionName,
+                        Description = p.Description
+                    }).ToList();
+                }
+
+            }
+            return result;
         }
 
         public async Task<IEnumerable<Instruction>> GetAllInstructions()
@@ -41,9 +58,10 @@ namespace LastWork.Models.Instructions
                 {
                     if (i.User != null)
                     {
-                        i.User.Instructions = i.User.Instructions.Select(p=>
-                        new Instruction {
-                            InstructionId=p.InstructionId,
+                        i.User.Instructions = i.User.Instructions.Select(p =>
+                        new Instruction
+                        {
+                            InstructionId = p.InstructionId,
                             InstructionName = p.InstructionName,
                             Description = p.Description
                         }).ToList();
@@ -57,19 +75,15 @@ namespace LastWork.Models.Instructions
         {
             Instruction i = data.GetInsruction();
             context.Attach(i.User);
-            // var user = await context.Users.FirstOrDefaultAsync(x=>x.Id==i.User.Id);
             await context.AddAsync(i);
             await context.SaveChangesAsync();
-            // user.Instructions.Add(i);
-            // await context.SaveChangesAsync();
             return i.InstructionId;
         }
 
         public async Task DeleteInstruction(long id)
         {
-            var instructionForDelete = await FindInstructionByIdAsync(id.ToString());
-            context.Remove(instructionForDelete);
-            await context.SaveChangesAsync();
+            context.Remove(new Instruction {InstructionId=id});
+            context.SaveChanges();
         }
     }
 }
