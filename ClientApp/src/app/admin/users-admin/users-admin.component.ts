@@ -11,7 +11,7 @@ export class UsersAdminComponent implements OnInit {
 
   constructor(private repository: Repository) {
     this.repository.getUsers();
-   }
+  }
 
   get users(): User[] {
     if (this.repository.users != null && this.repository.users.length > 0) {
@@ -22,6 +22,9 @@ export class UsersAdminComponent implements OnInit {
     return this.repository.users;
   }
 
+  deleteUser(id: string) {
+    this.repository.deleteUser(id);
+  }
   ngOnInit() {
   }
 }

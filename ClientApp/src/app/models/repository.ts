@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import "rxjs/add/operator/map";
 import { Pagination } from "./config-classes.repository";
 import { User } from "./user-model/user.model";
+import { Router } from "@angular/router";
 
 const userUrl = "/api/users";
 const instructionsUrl = "/api/instructions";
@@ -17,14 +18,15 @@ export class Repository {
     user: User;
     private paginationObject = new Pagination();
 
-    constructor(private http: Http) { 
-        this.getUser(localStorage.getItem("userId"));
+    constructor(private http: Http,
+        private router: Router) {
+            this.getUser(localStorage.getItem("userId"));
     }
 
     get pagination(): Pagination {
         return this.paginationObject;
     }
-    
+
     getUser(id: string) {
         this.sendRequest(RequestMethod.Get, userUrl + "/" + id)
             .subscribe(response => { this.user = response; });
@@ -38,6 +40,12 @@ export class Repository {
             })
     }
 
+    deleteUser(id: string) {
+        this.sendRequest(RequestMethod.Delete, userUrl + "/" + id, this.user)
+            .subscribe(() => {
+                this.getUsers();
+            })
+    }
     getInstructions() {
         this.sendRequest(RequestMethod.Get, instructionsUrl)
             .subscribe(response => {

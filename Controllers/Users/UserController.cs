@@ -14,9 +14,13 @@ namespace LastWork.Controllers.Users
     public class UserController : Controller
     {
         private IUserRepository repository;
+        private SignInManager<User> signInManager;
 
-        public UserController(IUserRepository repository) {
+        public UserController(IUserRepository repository,
+        SignInManager<User> signInManager)
+        {
             this.repository = repository;
+            this.signInManager = signInManager;
         }
         [HttpGet("users")]
         [Authorize]
@@ -26,21 +30,33 @@ namespace LastWork.Controllers.Users
         }
         [HttpGet("admins")]
         [Authorize(Roles = "administrator")]
-        public async Task<IList<User>> GetAllAdminsAsync() {
+        public async Task<IList<User>> GetAllAdminsAsync()
+        {
             return await repository.GetAllAdminsAsync();
         }
-        
+
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> FindUserById(string id) {
+        public async Task<IActionResult> FindUserById(string id)
+        {
+            var k = await repository.FindUserById(id);
             return Ok(await repository.FindUserById(id));
         }
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteUserAsync(string id) {
-            await repository.DeleteUserAsync(Convert.ToInt64(id));
-            return Ok();
+        public async Task<IActionResult> DeleteUserAsync(string id,[FromBody] User user)
+        {
+            if (user.Id == id)
+            {
+                await repository.DeleteUserAsync(id);
+                return Ok("myself");
+            }
+            else
+            {
+                await repository.DeleteUserAsync(id);
+            }
+            return Ok("delete");
         }
     }
 }
