@@ -232,7 +232,8 @@ namespace LastWork.Migrations
                 {
                     b.HasOne("LastWork.Models.Users.User", "User")
                         .WithMany("Instructions")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
