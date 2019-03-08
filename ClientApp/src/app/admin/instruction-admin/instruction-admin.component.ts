@@ -10,7 +10,7 @@ import { Instruction } from 'src/app/models/instruction-model/instruction.model'
 export class InstructionAdminComponent implements OnInit {
 
   constructor(private repo: Repository) {
-    this.repo.getInstructions();
+    this.repo.getInstructions("");
     this.repo.instruction =null;
    }
 
