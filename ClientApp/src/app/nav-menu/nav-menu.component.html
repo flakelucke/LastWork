@@ -1,10 +1,13 @@
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
   <ul class="navbar-nav mr-auto d-flex ">
     <li class="nav-item">
-      <a class="navbar-brand" routerLink="/">Home</a>
+      <a class="navbar-brand" [routerLink]="['/table','?search=']">Home</a>
     </li>
     <li class="nav-item" *ngIf="isAdmin">
       <a class="navbar-brand" routerLink="/admin">Admin panel</a>
+    </li>
+    <li *ngIf="authenticated">
+      <a class="navbar-brand" [routerLink]="['/user', this.repo.logUser?.id]">Personal Area</a>
     </li>
   </ul>
   <ng-template [ngIf]="!authenticated" [ngIfElse]="logout">
