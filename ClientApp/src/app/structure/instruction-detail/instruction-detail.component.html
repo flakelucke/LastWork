@@ -1,33 +1,18 @@
-<table class="table">
-    <tr style="text-align: center">
-        <th colspan="2" class="">Instruction</th>
-    </tr>
-    <tr>
-        <th>Name</th>
-        <td>{{instruction?.instructionName || 'No Data'}}</td>
-    </tr>
-    <tr>
-        <th>Description</th>
-        <td>{{instruction?.description || 'No Data'}}</td>
-    </tr>
-    <tr>
-        <th colspan="2" class="">Steps</th>
-    </tr>
-    <td>
-        <ol>
-            <li *ngFor="let step of instruction?.steps">
-                <p>Step Id : {{step?.instructionStepId|| 'No Data'}}</p>
-                <p>Step name: {{step?.stepName || 'No Data'}}</p>
-                <p>Step desctiption : {{step?.stepDescription || 'No Data'}}</p>
-            </li>
-        </ol>
-    </td>
-</table>
+<div style="padding:15px">
+    <h1 style="text-align: center;color: crimson" class="mb-2">{{instruction?.instructionName || 'No Data'}}</h1>
+    <p style="text-align: center;" class="mb-2">{{instruction?.description || 'No Data'}}</p>
+    <div class="d-flex flex-column align-items-center">
+        <div *ngFor="let step of instruction?.steps;index as i">
+            <h3>{{i+1}}: {{step?.stepName || 'No Data'}}</h3>
+            <p>{{step?.stepDescription || 'No Data'}}</p>
+        </div>
+    </div>
+</div>
 <ng-template [ngIf]="!isAdmin" [ngIfElse]="backadmin">
     <button class="btn btn-primary" routerLink="/table">Back</button>
-  </ng-template>
+</ng-template>
 <ng-template #backadmin>
     <button class="btn btn-sm btn-warning" routerLink="/admin/instructions">
-      Back
+        Back
     </button>
-  </ng-template>
+</ng-template>

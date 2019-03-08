@@ -17,13 +17,7 @@
             Please enter your password
         </div>
     </div>
-    <div class="form-group">
-        <label>Confim password:</label>
-        <input type="password" #confim_password="ngModel" name="confim_password" class="form-control"
-            [(ngModel)]="regService.confim_password" required />
-        <div *ngIf="confim_password.invalid" class="text-danger">
-            Please confim your password
-        </div>
+    <div class="form-group mt-2">
         <h3>After registration confim your email</h3>
     </div>
     <label>sulisi02KOLYA@</label>

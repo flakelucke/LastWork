@@ -4,7 +4,7 @@
 </div>
 <div class="form-group">
   <label>Description</label>
-  <input class="form-control" [(ngModel)]="instruction.description" />
+  <textarea class="form-control" [(ngModel)]="instruction.description" rows="5" cols="100"></textarea>
 </div>
 <div class="form-group">
   <label>Steps</label>
@@ -12,12 +12,15 @@
     <ul class="list-group">
       <li *ngFor="let s of instruction.steps" class="list-group-item">
         <label>Step name</label>
-        <input #step_name="ngModel" name="step_name" class="form-control" [(ngModel)]="s.stepName" required />
+        <input #step_name="ngModel" name="step_name" class="form-control" 
+        [(ngModel)]="s.stepName" required />
         <div *ngIf="step_name.invalid" class="text-danger">
           Please enter name
         </div>
         <label>Step description</label>
-        <input #step_desc="ngModel" name="step_desc" class="form-control" [(ngModel)]="s.stepDescription" required />
+        <textarea #step_desc="ngModel" name="step_desc" class="form-control" 
+        [(ngModel)]="s.stepDescription"
+          required rows="5" cols="100"></textarea>
         <div *ngIf="step_desc.invalid" class="text-danger">
           Please enter description
         </div>
