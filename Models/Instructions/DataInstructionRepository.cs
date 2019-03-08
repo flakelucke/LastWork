@@ -22,7 +22,7 @@ namespace LastWork.Models.Instructions
 
         public Task<Instruction> FindInstructionByIdAsync(string instructionId)
         {
-            Task<Instruction> result =  context.Instructions
+            Task<Instruction> result = context.Instructions
                .Include(p => p.Steps)
                .Include(x => x.User).ThenInclude(s => s.Instructions)
                .FirstOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
@@ -32,13 +32,14 @@ namespace LastWork.Models.Instructions
 
                 if (result.Result.User != null)
                 {
-                    result.Result.User.Instructions = result.Result.User.Instructions.Select(p =>
-                    new Instruction
-                    {
-                        InstructionId = p.InstructionId,
-                        InstructionName = p.InstructionName,
-                        Description = p.Description
-                    }).ToList();
+                    result.Result.User.Instructions = null;
+                    // result.Result.User.Instructions = result.Result.User.Instructions.Select(p =>
+                    // new Instruction
+                    // {
+                    //     InstructionId = p.InstructionId,
+                    //     InstructionName = p.InstructionName,
+                    //     Description = p.Description
+                    // }).ToList();
                 }
 
             }
@@ -58,13 +59,7 @@ namespace LastWork.Models.Instructions
                 {
                     if (i.User != null)
                     {
-                        i.User.Instructions = i.User.Instructions.Select(p =>
-                        new Instruction
-                        {
-                            InstructionId = p.InstructionId,
-                            InstructionName = p.InstructionName,
-                            Description = p.Description
-                        }).ToList();
+                        i.User.Instructions = null;
                     }
                 }
             }
@@ -82,8 +77,42 @@ namespace LastWork.Models.Instructions
 
         public async Task DeleteInstruction(long id)
         {
-            context.Remove(new Instruction {InstructionId=id});
+            context.Remove(new Instruction { InstructionId = id });
             context.SaveChanges();
+        }
+
+        public async Task<IEnumerable<Instruction>> SearchInstructions(string searchString)
+        {
+            var result = await context.Instructions
+            .Where(x => x.Description.Contains(searchString) ||
+                x.InstructionName.Contains(searchString))
+            .Include(p => p.Steps)
+            .Include(p => p.User).ThenInclude(s => s.Instructions)
+            .ToListAsync();
+
+            if (result != null)
+            {
+                foreach (var i in result)
+                {
+                    if (i.User != null)
+                    {
+                        i.User.Instructions = null;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public void AvoidReference(List<Instruction> list)
+        {
+            if (list != null)
+            {
+                foreach (var i in list)
+                    if (i.User != null)
+                    {
+                        i.User.Instructions = null;
+                    }
+            }
         }
     }
 }

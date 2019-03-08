@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Repository } from 'src/app/models/repository';
 import { Instruction } from 'src/app/models/instruction-model/instruction.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Step } from 'src/app/models/step-model/step.model';
+import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'app-instruction-table',
@@ -11,9 +12,17 @@ import { Step } from 'src/app/models/step-model/step.model';
 })
 export class InstructionTableComponent implements OnInit {
 
+  searchString: string = "";
+
   constructor(private repository: Repository,
-    private router: Router) {
-    this.repository.getInstructions();
+    private router: Router,
+    activeRoute: ActivatedRoute) {
+    activeRoute.queryParams
+      .filter(p => p.search)
+      .subscribe(x => {
+        this.searchString = x.search;
+        this.repository.getInstructions(this.searchString);
+      });
   }
 
   tableMode: boolean;
@@ -21,6 +30,13 @@ export class InstructionTableComponent implements OnInit {
   clearInstruction() {
     this.repository.instruction = new Instruction();
     this.tableMode = true;
+  }
+
+  searchInstructions(search: string) {
+    if (search == null || search == undefined || search.length < 1)
+      this.router.navigateByUrl("table?search=" + " ");
+    else
+      this.router.navigateByUrl("table?search=" + search);
   }
 
   get instructions(): Instruction[] {
@@ -38,6 +54,8 @@ export class InstructionTableComponent implements OnInit {
   }
   ngOnInit() {
     this.tableMode = true;
+    if(this.searchString==null||this.searchString=="")
+    this.repository.getInstructions(this.searchString);
   }
 
 }

@@ -37,9 +37,16 @@ namespace LastWork.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IEnumerable<Instruction>> GetAllInstruction()
-        {   
-            return await repository.GetAllInstructions();
+        public async Task<IEnumerable<Instruction>> GetAllInstruction([FromQuery]string search)
+        {
+            if (search==null||search.Length==0)
+            {
+                return await repository.GetAllInstructions();
+            }
+            else
+            {
+                return await repository.SearchInstructions(search);
+            }
         }
 
         [HttpGet("{id}")]
@@ -64,6 +71,14 @@ namespace LastWork.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("search/{search}")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<Instruction>> SearchInstractionsAsync(string search)
+        {
+            return await repository.SearchInstructions(search);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInstruction(long id)
         {
@@ -77,7 +92,7 @@ namespace LastWork.Controllers
         {
             Instruction instruction = context.Instructions
                         .Include(p => p.Steps)
-                        .Include(p=>p.User)
+                        .Include(p => p.User)
                                 .FirstOrDefault(p => p.InstructionId == id);
             InstructionData pdata = new InstructionData
             {
@@ -95,10 +110,9 @@ namespace LastWork.Controllers
 
                 instruction.Description = pdata.Description;
                 instruction.InstructionName = pdata.InstructionName;
-                instruction.User = pdata.User;
                 if (pdataStepCount < instrStepCount)
                     if (pdataStepCount == 0)
-                        instruction.Steps.RemoveRange(0, instrStepCount );
+                        instruction.Steps.RemoveRange(0, instrStepCount);
                     else
                         instruction.Steps.RemoveRange(pdataStepCount - 1, instrStepCount - pdataStepCount);
 
