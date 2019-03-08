@@ -1,0 +1,21 @@
+<table class="table">
+  <tr>
+      <th>Email</th>
+      <td>{{user?.email || 'No Data'}}</td>
+  </tr>
+  <tr>
+      <th>IsBlocked</th>
+      <td>{{user?.isBlocked || 'No Data'}}</td>
+  </tr>
+  <tr>
+      <th colspan="2" class="">Instructions</th>
+  </tr>
+  <td>
+      <ol>
+          <li *ngFor="let inst of user?.instructions">
+              <p>Instraction name : {{inst?.instructionName|| 'No Data'}}</p>
+              <p>Step name: {{inst?.description || 'No Data'}}</p>
+          </li>
+      </ol>
+  </td>
+</table>
