@@ -24,7 +24,7 @@ namespace LastWork.Auth.Controllers
 
         [HttpPost("/api/account/login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel creds)
-        {
+        {   
             User user = await userManager.FindByNameAsync(creds.Name);
             if (ModelState.IsValid && await DoLogin(creds))
             {
@@ -51,7 +51,6 @@ namespace LastWork.Auth.Controllers
         [HttpPost("/api/account/register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel creds)
         {
-            var k = role.Roles;
             if (ModelState.IsValid)
             {
                 User user = new User { Email = creds.Email, UserName = creds.Email };

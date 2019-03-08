@@ -22,15 +22,17 @@ namespace LastWork.Models.Users
         public async Task DeleteUserAsync(string id)
         {
             var user = await userManager.FindByIdAsync(id);
+            if(user!=null)
             await userManager.DeleteAsync(user);
         }
 
         public async Task<IList<User>> GetAllUsersAsync()
         {
             var result = await userManager.GetUsersInRoleAsync("user");
-            foreach(var i in result)
+            foreach (var i in result)
             {
-                context.Entry(i).Collection(x=>x.Instructions).Load();
+                context.Entry(i).Collection(x => x.Instructions).Load();
+                AvoidRelatedUserData(i);
             }
             return result;
         }
@@ -38,10 +40,12 @@ namespace LastWork.Models.Users
         public async Task<IList<User>> GetAllAdminsAsync()
         {
             var result = await userManager.GetUsersInRoleAsync("administrator");
-            foreach(var i in result)
+            foreach (var i in result)
             {
-                context.Entry(i).Collection(x=>x.Instructions).Load();
+                context.Entry(i).Collection(x => x.Instructions).Load();
+                AvoidRelatedUserData(i);
             }
+
             return result;
         }
 
@@ -54,9 +58,20 @@ namespace LastWork.Models.Users
 
         public async Task<User> FindUserById(string id)
         {
-            var k = await userManager.FindByIdAsync(id);
-            context.Entry(k).Collection(x=>x.Instructions).Load();
-            return await userManager.FindByIdAsync(id);
+            var user = await userManager.FindByIdAsync(id);
+            context.Entry(user).Collection(x => x.Instructions).Load();
+            AvoidRelatedUserData(user);
+            return user;
+        }
+
+        public void AvoidRelatedUserData(User user) {
+            if (user != null)
+            {
+                if (user.Instructions != null)
+                {
+                    user.Instructions.Select(x=>x.User = null).ToList();
+                }
+            }
         }
     }
 }

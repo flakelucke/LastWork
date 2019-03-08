@@ -22,7 +22,7 @@ namespace LastWork.Controllers.Users
             this.repository = repository;
             this.signInManager = signInManager;
         }
-        [HttpGet("users")]
+        [HttpGet]
         [Authorize]
         public async Task<IList<User>> GetAllUsersAsync()
         {
@@ -38,8 +38,7 @@ namespace LastWork.Controllers.Users
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> FindUserById(string id)
-        {
-            var k = await repository.FindUserById(id);
+        {   
             return Ok(await repository.FindUserById(id));
         }
 

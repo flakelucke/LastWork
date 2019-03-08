@@ -5,6 +5,7 @@ export class User {
         public id: string,
         public email?: string,
         public userName?: string,
+        public isBlocked?: boolean,
         public instructions?: Instruction[]
     ){}
 }

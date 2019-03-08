@@ -2,3 +2,11 @@
     display: inline-block;
     word-wrap:break-word;
 }
+.a_instr {
+    color: darkslategray;
+    text-decoration: none;
+}
+.a_instr:hover {
+    color: darkslategray;
+    text-decoration: none;
+}

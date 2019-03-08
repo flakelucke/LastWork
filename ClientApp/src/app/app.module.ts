@@ -13,6 +13,7 @@ import { RoutingConfig } from './app.routing';
 import { AdminModule } from "./admin/admin.module";
 import { PaginationComponent } from "./structure/pagination/pagination.component";
 import { AuthModule } from "./auth/auth.module";
+import { UserDetailComponent } from './structure/user-detail/user-detail.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AuthModule } from "./auth/auth.module";
     NavMenuComponent,
     InstructionTableComponent,
     InstructionDetailComponent,
-    PaginationComponent
+    PaginationComponent,
+    UserDetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -33,6 +35,7 @@ import { AuthModule } from "./auth/auth.module";
     AuthModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [UserDetailComponent]
 })
 export class AppModule { }
