@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LastWork.Migrations
 {
-    public partial class AddDeleteBehavior : Migration
+    public partial class ReplaceBehavior : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -172,7 +172,7 @@ namespace LastWork.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

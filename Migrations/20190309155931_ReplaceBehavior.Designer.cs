@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LastWork.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190307160542_AddDeleteBehavior")]
-    partial class AddDeleteBehavior
+    [Migration("20190309155931_ReplaceBehavior")]
+    partial class ReplaceBehavior
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -235,7 +235,7 @@ namespace LastWork.Migrations
                     b.HasOne("LastWork.Models.Users.User", "User")
                         .WithMany("Instructions")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
