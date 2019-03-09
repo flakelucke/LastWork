@@ -21,25 +21,22 @@ namespace LastWork.Controllers
     {
         private IInstructionRepository repository;
         private DataContext context;
-        RoleManager<IdentityRole> role;
-        UserManager<User> user;
+        UserManager<User> userManager;
         public IntructionValuesController(IInstructionRepository repository,
                     DataContext context,
-                    RoleManager<IdentityRole> role,
-                    UserManager<User> user
+                    UserManager<User> userManager
                     )
         {
             this.repository = repository;
             this.context = context;
-            this.role = role;
-            this.user = user;
+            this.userManager = userManager;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IEnumerable<Instruction>> GetAllInstruction([FromQuery]string search)
         {
-            if (search==null||search.Length==0)
+            if (search == null || search.Length == 0)
             {
                 return await repository.GetAllInstructions();
             }
@@ -53,8 +50,6 @@ namespace LastWork.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetInstruction(long id)
         {
-            // await role.CreateAsync(new IdentityRole("administrator"));
-            // await role.CreateAsync(new IdentityRole("user"));
             return Ok(await repository.FindInstructionByIdAsync(id.ToString()));
         }
         [HttpPost]
@@ -82,8 +77,13 @@ namespace LastWork.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInstruction(long id)
         {
-            await repository.DeleteInstruction(id);
-            return Ok();
+            // var root = await repository.FindInstructionByIdAsync(id.ToString());
+            // if (root.User.Id == user.Id || await userManager.IsInRoleAsync(user, "administrator"))
+            // {
+                await repository.DeleteInstruction(id);
+                return Ok();
+            // }
+            // return BadRequest();
         }
 
         [HttpPatch("{id}")]

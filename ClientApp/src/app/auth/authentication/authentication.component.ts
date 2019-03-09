@@ -18,7 +18,7 @@ export class AuthenticationComponent implements OnInit {
       this.showError = !res;
     })
   }
-
+  
   ngOnInit() {
   }
 

@@ -33,13 +33,6 @@ namespace LastWork.Models.Instructions
                 if (result.Result.User != null)
                 {
                     result.Result.User.Instructions = null;
-                    // result.Result.User.Instructions = result.Result.User.Instructions.Select(p =>
-                    // new Instruction
-                    // {
-                    //     InstructionId = p.InstructionId,
-                    //     InstructionName = p.InstructionName,
-                    //     Description = p.Description
-                    // }).ToList();
                 }
 
             }
@@ -49,26 +42,14 @@ namespace LastWork.Models.Instructions
         public async Task<IEnumerable<Instruction>> GetAllInstructions()
         {
             var result = await context.Instructions
-            .Include(p => p.Steps)
-            .Include(p => p.User).ThenInclude(s => s.Instructions)
+            // .Include(p => p.Steps)
             .ToListAsync();
-
-            if (result != null)
-            {
-                foreach (var i in result)
-                {
-                    if (i.User != null)
-                    {
-                        i.User.Instructions = null;
-                    }
-                }
-            }
             return result;
         }
 
         public async Task<long> CreateInstruction(InstructionData data)
         {
-            Instruction i = data.GetInsruction();
+            Instruction i = data.GetInstruction();
             context.Attach(i.User);
             await context.AddAsync(i);
             await context.SaveChangesAsync();
@@ -77,7 +58,7 @@ namespace LastWork.Models.Instructions
 
         public async Task DeleteInstruction(long id)
         {
-            context.Remove(new Instruction { InstructionId = id });
+            context.Remove(new Instruction { InstructionId = id});
             context.SaveChanges();
         }
 
@@ -89,21 +70,12 @@ namespace LastWork.Models.Instructions
             .Include(p => p.Steps)
             .Include(p => p.User).ThenInclude(s => s.Instructions)
             .ToListAsync();
-
-            if (result != null)
-            {
-                foreach (var i in result)
-                {
-                    if (i.User != null)
-                    {
-                        i.User.Instructions = null;
-                    }
-                }
-            }
+            
+            AvoidReference(result);
             return result;
         }
 
-        public void AvoidReference(List<Instruction> list)
+        public static void AvoidReference(List<Instruction> list)
         {
             if (list != null)
             {
