@@ -42,9 +42,17 @@ namespace LastWork
                         options.UseSqlServer(Configuration["Data:Flake:ConnectionString"]));
             // In production, the Angular files will be served from this directory
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(x =>
+            {
+                x.Password.RequireNonAlphanumeric = false;
+                x.Password.RequireUppercase = false;
+                x.Password.RequireDigit = false;
+                x.Password.RequireLowercase = false;
+                x.Password.RequiredLength = 6;
+            })
                 .AddEntityFrameworkStores<DataContext>()
                     .AddDefaultTokenProviders();
+
 
             services.AddTransient<IInstructionRepository, DataInstructionRepository>();
             services.AddTransient<IStepRepository, DataStepRepository>();
