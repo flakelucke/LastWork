@@ -8,6 +8,7 @@ import { InstructionAdminComponent } from "./instruction-admin/instruction-admin
 import { InstructionEditorComponent } from "./instruction-editor/instruction-editor.component";
 import { PaginationAdminComponent } from "./pagination-admin/pagination-admin.component";
 import { UsersAdminComponent } from "./users-admin/users-admin.component";
+import { AdminsAdminComponent } from "./admins-admin/admins-admin.component";
 
 @NgModule({
     imports: [BrowserModule, RouterModule, FormsModule],
@@ -16,8 +17,9 @@ import { UsersAdminComponent } from "./users-admin/users-admin.component";
         InstructionAdminComponent,
         InstructionEditorComponent,
         PaginationAdminComponent,
-        UsersAdminComponent],
+        UsersAdminComponent,
+        AdminsAdminComponent],
     providers: [],
-    exports: [InstructionEditorComponent,InstructionAdminComponent]
+    exports: [InstructionEditorComponent, InstructionAdminComponent]
 })
 export class AdminModule { }

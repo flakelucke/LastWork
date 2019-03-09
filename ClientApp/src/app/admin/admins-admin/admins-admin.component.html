@@ -1,0 +1,19 @@
+<table class="table table-sm mt-4">
+    <tr>
+        <th>Email</th>
+        <th>IsBlocked</th>
+    </tr>
+    <tr *ngFor="let user of admins">
+        <td><a [routerLink]="['/user', user.id]">{{user.email}}</a></td>
+        <td>{{user.isBlocked}}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="deleteUser(user)">
+              Delete
+          </button>
+          <button class="btn btn-sm btn-outline-primary" (click)="giveAdmin(user.id)">Give admin</button>
+      </td>
+    </tr>
+  </table>
+  <div class="d-flex flex-row">
+    <app-pagination-admin></app-pagination-admin>
+  </div>

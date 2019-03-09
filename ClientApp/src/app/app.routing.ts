@@ -10,6 +10,7 @@ import { RegisterComponent } from "./auth/register/register.component";
 import { RoleGuard } from "./auth/role.guard";
 import { UsersAdminComponent } from "./admin/users-admin/users-admin.component";
 import { UserDetailComponent } from "./structure/user-detail/user-detail.component";
+import { AdminsAdminComponent } from "./admin/admins-admin/admins-admin.component";
 
 const routes: Routes = [
     { path: "login", component: AuthenticationComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
         children: [
             { path: "instructions", component: InstructionAdminComponent },
             { path: "users", component: UsersAdminComponent },
+            { path: "admins", component: AdminsAdminComponent },
             { path: "overview", component: OverviewComponent },
             { path: "", component: OverviewComponent }
 

@@ -23,7 +23,7 @@ import { UserDetailComponent } from './structure/user-detail/user-detail.compone
     InstructionDetailComponent,
     PaginationComponent,
     UserDetailComponent
-  ],
+    ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
