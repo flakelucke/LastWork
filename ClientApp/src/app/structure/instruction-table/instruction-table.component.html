@@ -1,20 +1,17 @@
 <div *ngIf="tableMode; else create" class="d-flex flex-column ml-3 mt-3">
-    <div class="flex-row">
-        <input class="mr-sm-2 mb-2" type="search" placeholder="Search" aria-label="Search" #search>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+    <div class="flex-row search-div">
+        <input class="mr-sm-2 mb-2 search-input" type="search" placeholder="Search" aria-label="Search" #search>
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit"
             (click)="searchInstructions(search.value)">Search</button>
+        <button *ngIf="authenticated" class="btn btn-primary create-button" (click)="clearInstruction(); tableMode = false" style="width: 150px">Create</button>
     </div>
-    <button class="btn btn-primary" (click)="clearInstruction(); tableMode = false" style="width: 200px">Create</button>
-    <div *ngFor="let p of instructions">
+    <div *ngFor="let p of instructions" class="border-bottom inst-div" style="margin-left: 40px">
         <ng-template class="d-flex flex-row" [ngIf]="instruction?.instructionId != p.instructionId" [ngIfElse]="edit">
             <div>
                 <h1 class="card-title" style="word-wrap: break-word"><a class="a_instr" [routerLink]="['/detail', p.instructionId]">{{p.instructionName}}</a></h1>
                 <p class="card-text" style="word-wrap: break-word">{{p.description}}</p>
             </div>
             <div class="d-flex flex-row">
-                <!-- <button class="btn btn-primary btn-sm mr-2" [routerLink]="['/detail', p.instructionId]">
-                    Details
-                </button> -->
             </div>
         </ng-template>
     </div>

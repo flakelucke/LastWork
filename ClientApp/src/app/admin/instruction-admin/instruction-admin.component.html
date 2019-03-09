@@ -1,6 +1,6 @@
 <div *ngIf="tableMode; else create" class="d-flex flex-column ml-3 mt-3">
-    <button class="btn btn-primary" (click)="clearInstruction(); tableMode = false" style="width: 200px">Create</button>
-    <div *ngFor="let p of instructions" class="border-bottom mb-2 pb-3">
+    <button  class="btn btn-primary create-button" (click)="clearInstruction(); tableMode = false" style="width: 150px; margin: 0 auto">Create</button>
+    <div *ngFor="let p of instructions" class="border-bottom mb-2 pb-3 inst-div" style="margin-left: 60px">
         <ng-template class="d-flex flex-row" [ngIf]="instruction?.instructionId != p.instructionId" [ngIfElse]="edit">
             <div>
                 <h1 class="card-title" style="word-wrap: break-word"><a class="a_instr"  [routerLink]="['/detail', p.instructionId]">{{p.instructionName}}</a></h1>

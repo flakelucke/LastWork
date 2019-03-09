@@ -7,16 +7,30 @@
       <a class="navbar-brand" routerLink="/admin">Admin panel</a>
     </li>
     <li *ngIf="authenticated">
-      <a class="navbar-brand" [routerLink]="['/user', this.repo.logUser?.id]">Personal Area</a>
+      <a class="navbar-brand" [routerLink]="['/user', this.repo.logUser?.id]">{{this.repo.logUser?.email}}</a>
     </li>
   </ul>
   <ng-template [ngIf]="!authenticated" [ngIfElse]="logout">
-      <button class="btn btn-sm btn-warning" routerLink="/login">
-        Login
-      </button>
-    </ng-template>
+    <p class="mr-1" *ngIf="authenticated">this.repo.logUser?.email</p>
+    <button class="btn btn-sm btn-outline-success" routerLink="/login">
+      Login
+    </button>
+  </ng-template>
   <ng-template #logout>
-      <button class="btn btn-sm btn-warning" (click)="authService.logout()">
-        Log Out
-      </button>
-    </ng-template>
+    <button class="btn btn-sm btn-outline-success" (click)="authService.logout()">
+      Log Out
+    </button>
+  </ng-template>
+</nav>
+<div class="topnav" id="myTopnav">
+  <a [routerLink]="['/table','?search=']">Home</a>
+  <a routerLink="/admin" *ngIf="isAdmin">Admin panel</a>
+  <a [routerLink]="['/user', this.repo.logUser?.id]" *ngIf="authenticated">{{this.repo.logUser?.email}}</a>
+  <a class="badge badge-info" routerLink="/login" *ngIf="!authenticated">
+    Login
+  </a>
+  <a class="badge badge-info" (click)="authService.logout()" *ngIf="authenticated">
+      Log Out 
+  </a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()" *ngIf="authenticated">&#9776;</a>
+</div>
