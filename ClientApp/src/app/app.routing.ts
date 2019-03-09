@@ -11,6 +11,7 @@ import { RoleGuard } from "./auth/role.guard";
 import { UsersAdminComponent } from "./admin/users-admin/users-admin.component";
 import { UserDetailComponent } from "./structure/user-detail/user-detail.component";
 import { AdminsAdminComponent } from "./admin/admins-admin/admins-admin.component";
+import { PersonAreaGuard } from "./auth/person-area.guard";
 
 const routes: Routes = [
     { path: "login", component: AuthenticationComponent },
@@ -28,12 +29,12 @@ const routes: Routes = [
 
         ]
     },
-    { path: "table", component: InstructionTableComponent, canActivate: [AuthenticationGuard] },
-    { path: "table?search=:searchString", component: InstructionTableComponent, canActivate: [AuthenticationGuard] },
-    { path: "user/:id", component: UserDetailComponent, canActivate: [AuthenticationGuard] },
-    { path: "detail/:id", component: InstructionDetailComponent, canActivate: [AuthenticationGuard] },
-    { path: "detail", component: InstructionDetailComponent, canActivate: [AuthenticationGuard] },
-    { path: "", component: InstructionTableComponent, canActivate: [AuthenticationGuard] },
-    { path: "**", component: InstructionTableComponent, canActivate: [AuthenticationGuard] }]
+    { path: "table", component: InstructionTableComponent},
+    { path: "table?search=:searchString", component: InstructionTableComponent},
+    { path: "user/:id", component: UserDetailComponent, canActivate: [AuthenticationGuard,PersonAreaGuard]},
+    { path: "detail/:id", component: InstructionDetailComponent},
+    { path: "detail", component: InstructionDetailComponent },
+    { path: "", component: InstructionTableComponent},
+    { path: "**", component: InstructionTableComponent}]
 
 export const RoutingConfig = RouterModule.forRoot(routes);
