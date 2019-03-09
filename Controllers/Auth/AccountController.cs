@@ -12,23 +12,21 @@ namespace LastWork.Auth.Controllers
     {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
-        private RoleManager<IdentityRole> role;
 
         public AccountController(UserManager<User> userMrg,
-                                    SignInManager<User> signInMgr,RoleManager<IdentityRole> role)
+                                    SignInManager<User> signInMgr)
         {
             userManager = userMrg;
             signInManager = signInMgr;
-            this.role = role;
         }
 
         [HttpPost("/api/account/login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel creds)
-        {   
+        {
             User user = await userManager.FindByNameAsync(creds.Name);
             if (ModelState.IsValid && await DoLogin(creds))
             {
-                if (await userManager.IsEmailConfirmedAsync(user))
+                if (await userManager.IsEmailConfirmedAsync(user)&& user.IsBlocked != true)
                 {
                     if (await userManager.IsInRoleAsync(user, "administrator"))
                     {
@@ -37,7 +35,7 @@ namespace LastWork.Auth.Controllers
                     else return Ok($"user +{user.Id}");
                 }
                 else
-                    BadRequest();
+                    BadRequest("confim");
             }
             return BadRequest(ModelState);
         }

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LastWork.Models.Instructions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LastWork.Models.Users
 {
@@ -10,20 +12,24 @@ namespace LastWork.Models.Users
     {
         private readonly DataContext context;
         private UserManager<User> userManager;
-        private RoleManager<IdentityRole> role;
+        private IInstructionRepository repository;
 
-
-        public DataUserRepository(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> role)
+        public DataUserRepository(DataContext context,
+        UserManager<User> userManager,
+        IInstructionRepository repository)
         {
             this.context = context;
             this.userManager = userManager;
-            this.role = role;
+            this.repository = repository;
         }
         public async Task DeleteUserAsync(string id)
         {
-            var user = await userManager.FindByIdAsync(id);
-            if(user!=null)
-            await userManager.DeleteAsync(user);
+            var takeUser = await FindUserById(id);
+            if (takeUser != null)
+            {
+                await userManager.DeleteAsync(takeUser);
+            }
+
         }
 
         public async Task<IList<User>> GetAllUsersAsync()
@@ -49,29 +55,60 @@ namespace LastWork.Models.Users
             return result;
         }
 
-
         public async Task GiveAdminToUser(string id)
         {
-            var user = await userManager.FindByIdAsync(id);
-            await userManager.AddToRoleAsync(user, "administrator");
+            var takeUser = await userManager.FindByIdAsync(id);
+            if (takeUser != null)
+            {
+                await userManager.RemoveFromRoleAsync(takeUser, "user");
+                await userManager.AddToRoleAsync(takeUser, "administrator");
+            }
         }
 
         public async Task<User> FindUserById(string id)
         {
             var user = await userManager.FindByIdAsync(id);
-            context.Entry(user).Collection(x => x.Instructions).Load();
-            AvoidRelatedUserData(user);
+            if (user != null)
+            {
+                context.Entry(user).Collection(x => x.Instructions).Load();
+                AvoidRelatedUserData(user);
+            }
             return user;
         }
 
-        public void AvoidRelatedUserData(User user) {
+        public static void AvoidRelatedUserData(User user)
+        {
             if (user != null)
             {
                 if (user.Instructions != null)
                 {
-                    user.Instructions.Select(x=>x.User = null).ToList();
+                    user.Instructions.Select(x => x.User = null).ToList();
                 }
             }
+        }
+
+        public async Task PickUpAdminAsync(string id)
+        {
+            var takeUser = await userManager.FindByIdAsync(id);
+            if (takeUser != null)
+            {
+                await userManager.RemoveFromRoleAsync(takeUser, "administrator");
+                await userManager.AddToRoleAsync(takeUser, "user");
+            }
+        }
+
+        public async Task BlockUserAsync(string id)
+        {
+            var takeUser = await userManager.FindByIdAsync(id);
+            if (takeUser != null)
+            {
+                if (takeUser.IsBlocked)
+                {
+                    takeUser.IsBlocked = false;
+                }
+                else takeUser.IsBlocked = true;
+            }
+            await context.SaveChangesAsync();
         }
     }
 }

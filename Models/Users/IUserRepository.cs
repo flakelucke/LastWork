@@ -11,5 +11,7 @@ namespace LastWork.Models.Users
         Task<IList<User>> GetAllAdminsAsync(); 
         Task<User> FindUserById(string id);
         Task GiveAdminToUser(string id);
+        Task PickUpAdminAsync(string id);
+        Task BlockUserAsync(string id);
     }
 }

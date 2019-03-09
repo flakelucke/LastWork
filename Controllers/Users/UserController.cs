@@ -14,6 +14,7 @@ namespace LastWork.Controllers.Users
     public class UserController : Controller
     {
         private IUserRepository repository;
+        private UserManager<User> userManager;
         private SignInManager<User> signInManager;
 
         public UserController(IUserRepository repository,
@@ -23,7 +24,7 @@ namespace LastWork.Controllers.Users
             this.signInManager = signInManager;
         }
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "administrator")]
         public async Task<IList<User>> GetAllUsersAsync()
         {
             return await repository.GetAllUsersAsync();
@@ -38,24 +39,43 @@ namespace LastWork.Controllers.Users
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> FindUserById(string id)
-        {   
+        {
             return Ok(await repository.FindUserById(id));
         }
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteUserAsync(string id,[FromBody] User user)
+        public async Task<IActionResult> DeleteUserAsync(string id, [FromBody] User user)
         {
-            if (user.Id == id)
+            if (user.Id == id || await userManager.IsInRoleAsync(user, "administrator"))
             {
                 await repository.DeleteUserAsync(id);
-                return Ok("myself");
+                return Ok();
             }
-            else
-            {
-                await repository.DeleteUserAsync(id);
-            }
-            return Ok("delete");
+            return BadRequest();
+        }
+        [HttpPost("{id}")]
+        [Authorize(Roles = "administrator")]
+        public async Task<IActionResult> GiveAdminToUser([FromRoute] string id)
+        {
+            await repository.GiveAdminToUser(id);
+            return Ok();
+        }
+
+        [HttpPost("pick/{id}")]
+        [Authorize(Roles = "administrator")]
+        public async Task<IActionResult> PickUpAdminAsync([FromRoute] string id)
+        {
+            await repository.PickUpAdminAsync(id);
+            return Ok();
+        }
+
+        [HttpPost("block/{id}")]
+        [Authorize(Roles = "administrator")]
+        public async Task<IActionResult> BlockUserAsync([FromRoute] string id)
+        {
+            await repository.BlockUserAsync(id);
+            return Ok();
         }
     }
 }

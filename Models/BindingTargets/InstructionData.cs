@@ -20,7 +20,7 @@ namespace LastWork.Models.BindingTargets
         [Required]
         public User User { get;set;}
 
-        public Instruction GetInsruction() => new Instruction()
+        public Instruction GetInstruction() => new Instruction()
         {
             InstructionName = InstructionName,
             Description = Description,

@@ -17,24 +17,10 @@ namespace LastWork.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Instruction>().HasMany<InstructionStep>(x => x.Steps)
                 .WithOne().OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<User>().HasMany<Instruction>(p=>p.Instructions)
             .WithOne(r=>r.User).OnDelete(DeleteBehavior.Cascade);
-            // modelBuilder.Entity<Instruction>().HasOne<User>(x=>x.User)
-            // .WithMany(r=>r.Instructions).OnDelete(DeleteBehavior.SetNull); 
-
-            // modelBuilder.Entity<User>()
-            //  .HasMany(e=>e.Instructions)
-            //  .WithOne("User")
-            //  .HasForeignKey("InstructionId");
-
-            // modelBuilder.Entity<Instruction>()
-            //  .HasOne(x=>x.User)
-            //  .WithMany("Instructions")
-            //  .HasForeignKey("UserId")
-            //  .HasPrincipalKey("Id");
         }
     }
 }
