@@ -18,6 +18,7 @@ export class Repository {
     users: User[];
     logUser: User;
     user: User;
+    admins: User[];
     private paginationObject = new Pagination();
 
     constructor(private http: Http,
@@ -43,6 +44,14 @@ export class Repository {
             });
     }
 
+    getAdmins() {
+        this.sendRequest(RequestMethod.Get, userUrl + "/admins")
+            .subscribe(res => {
+                this.admins = res;
+                this.pagination.currentPage = 1;
+            })
+    }
+
     getUsers() {
         this.sendRequest(RequestMethod.Get, userUrl)
             .subscribe(res => {
@@ -51,15 +60,66 @@ export class Repository {
             })
     }
 
-    deleteUser(id: string) {
-        this.sendRequest(RequestMethod.Delete, userUrl + "/" + id, this.logUser)
+    deleteUser(user: User) {
+        this.sendRequest(RequestMethod.Delete, userUrl + "/" + user.id, this.logUser)
             .subscribe(() => {
-                this.getUsers();
+                if (user.id == this.logUser.id) {
+                    localStorage.removeItem("userId");
+                    localStorage.removeItem("admin");
+                    localStorage.removeItem("user");
+                    this.logout();
+                    this.router.navigateByUrl("/");
+                }
+                this.users.splice(this.users.indexOf(user), 1);
+            })
+
+    }
+
+    giveAdmin(id: string) {
+        this.sendRequest(RequestMethod.Post, userUrl + "/" + id)
+            .subscribe(() => {
+                this.users.splice(this.users.indexOf(this.users.find(x => x.id == id)), 1);
+                // this.getUsers();
             })
     }
 
+    pickUpAdmin(id: string) {
+        this.sendRequest(RequestMethod.Post, userUrl + "/pick/" + id)
+            .subscribe(() => {
+                if (id == this.logUser.id) {
+                    this.router.navigateByUrl("/");
+                    localStorage.setItem("user", localStorage.getItem("admin"));
+                    localStorage.removeItem("admin");
+                }
+                this.admins.splice(this.admins.indexOf(this.admins.find(x => x.id == id)), 1);
+            })
+    }
+    blockUser(id:string) {
+        this.sendRequest(RequestMethod.Post, userUrl + "/block/" + id)
+        .subscribe(()=> {
+            if (id == this.logUser.id) {
+                localStorage.removeItem("admin");
+                localStorage.removeItem("user");
+                localStorage.removeItem("userId");
+                this.router.navigateByUrl("/");
+            }
+            this.getUsers();
+        })
+    }
+    blockAdmin(id:string) {
+        this.sendRequest(RequestMethod.Post, userUrl + "/block/" + id)
+        .subscribe(()=> {
+            if (id == this.logUser.id) {
+                localStorage.removeItem("admin");
+                localStorage.removeItem("user");
+                localStorage.removeItem("userId");
+                this.router.navigateByUrl("/");
+            }
+            this.getAdmins();
+        })
+    }
     getInstructions(search: string) {
-        this.sendRequest(RequestMethod.Get, instructionsUrl+(search != null ? "?search="+ search : ""))
+        this.sendRequest(RequestMethod.Get, instructionsUrl + (search != null ? "?search=" + search : ""))
             .subscribe(response => {
                 this.instructions = response;
                 this.pagination.currentPage = 1;
@@ -79,12 +139,12 @@ export class Repository {
         this.sendRequest(RequestMethod.Post, instructionsUrl, data)
             .subscribe(response => {
                 instr.instructionId = response;
-                this.instructions.push(instr);
+                this.instructions.unshift(instr);
             });
     }
 
     deleteInstruction(id: number) {
-        this.sendRequest(RequestMethod.Delete, instructionsUrl + "/" + id)
+        this.sendRequest(RequestMethod.Delete, instructionsUrl + "/" + id, this.logUser)
             .subscribe(() => {
                 this.getInstructions("");
             });

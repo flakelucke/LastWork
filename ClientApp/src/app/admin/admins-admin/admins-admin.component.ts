@@ -22,14 +22,17 @@ export class AdminsAdminComponent implements OnInit {
     return this.repository.admins;
   }
 
-  // giveAdmin(id: string) {
-  //   this.repository.giveAdmin(id);
-  // }
+  pickUpAdmin(id: string) {
+    this.repository.pickUpAdmin(id);
+  }
 
   deleteUser(user: User) {
     this.repository.deleteUser(user);
   }
 
+  blockAdmin(id : string) {
+    this.repository.blockAdmin(id);
+  }
   ngOnInit() {
   }
 

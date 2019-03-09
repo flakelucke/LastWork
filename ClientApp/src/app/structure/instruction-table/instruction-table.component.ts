@@ -4,6 +4,7 @@ import { Instruction } from 'src/app/models/instruction-model/instruction.model'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Step } from 'src/app/models/step-model/step.model';
 import 'rxjs/add/operator/filter';
+import { AuthenticationService } from 'src/app/auth/authentication.service';
 
 @Component({
   selector: 'app-instruction-table',
@@ -16,7 +17,8 @@ export class InstructionTableComponent implements OnInit {
 
   constructor(private repository: Repository,
     private router: Router,
-    activeRoute: ActivatedRoute) {
+    activeRoute: ActivatedRoute,
+    public authService: AuthenticationService) {
     activeRoute.queryParams
       .filter(p => p.search)
       .subscribe(x => {
@@ -26,6 +28,10 @@ export class InstructionTableComponent implements OnInit {
   }
 
   tableMode: boolean;
+
+  public get authenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
 
   clearInstruction() {
     this.repository.instruction = new Instruction();

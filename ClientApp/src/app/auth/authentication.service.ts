@@ -26,8 +26,8 @@ export class AuthenticationService {
                     this.password = null;
                     localStorage.setItem("userId", response.text().slice(6));
                     this.router.navigateByUrl(this.callbackUrl || "/table");
+                    this.repo.getLogUser(localStorage.getItem("userId"));
                 }
-                this.repo.getLogUser(localStorage.getItem("userId"));
                 return this.authenticated;
             })
             .catch(e => {
@@ -44,7 +44,7 @@ export class AuthenticationService {
         localStorage.removeItem("admin");
         localStorage.removeItem("user");
         this.repo.logout();
-        this.router.navigateByUrl("/login");
+        this.router.navigateByUrl("/");
     }
 
     public isAuthenticated(): boolean {

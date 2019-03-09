@@ -22,9 +22,18 @@ export class UsersAdminComponent implements OnInit {
     return this.repository.users;
   }
 
-  deleteUser(id: string) {
-    this.repository.deleteUser(id);
+  giveAdmin(id: string) {
+    this.repository.giveAdmin(id);
   }
+
+  deleteUser(user: User) {
+    this.repository.deleteUser(user);
+  }
+
+  blockUser(id : string) {
+    this.repository.blockUser(id);
+  }
+  
   ngOnInit() {
   }
 }

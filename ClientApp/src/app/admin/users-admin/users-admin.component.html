@@ -1,25 +1,22 @@
 <table class="table table-sm mt-4">
   <tr>
-      <th>Email</th>
-      <th>IsBlocked</th>
+    <th>Email</th>
+    <th>IsBlocked</th>
   </tr>
   <tr *ngFor="let user of users">
-      <td>{{user.email}}</td>
-      <td>{{user.isBlocked}}</td>
-      <td>
-        <p *ngFor="let inst of user.instructions">
-          InstName: {{inst.instructionName}}
-        </p>
-      </td>
-      <td>
-          <button class="btn btn-primary btn-sm" [routerLink]="['/user', user.id]">
-              Details
-          </button>
-      </td>
-      <td>
-        <button class="btn btn-danger btn-sm"(click)="deleteUser(user.id)">
-            Delete
-        </button>
+    <td><a [routerLink]="['/user', user.id]">{{user.email}}</a></td>
+    <td>
+      <div class="d-flex flex-column">
+        <p>{{user.isBlocked}}</p>
+        <button class="btn btn-danger btn-sm" style="width: 60px;margin-top: -15px"
+          (click)="blockUser(user.id)">Block</button>
+      </div>
+    </td>
+    <td>
+      <button class="btn btn-sm btn-outline-primary mr-3" (click)="giveAdmin(user.id)">Give admin</button>
+      <button class="btn btn-danger btn-sm" (click)="deleteUser(user)">
+        Delete
+      </button>
     </td>
   </tr>
 </table>
