@@ -30,7 +30,6 @@ export class InstructionAdminComponent implements OnInit {
             changes.set("Description", this.repo.instruction.description);
             changes.set("InstructionName", this.repo.instruction.instructionName);
             changes.set("Steps",this.repo.instruction.steps);
-            changes.set("User",this.repo.instruction.user);
             this.repo.updateInstruction(this.repo.instruction.instructionId,changes);
         }
         this.clearInstruction();

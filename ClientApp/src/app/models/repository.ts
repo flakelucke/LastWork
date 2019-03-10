@@ -79,7 +79,6 @@ export class Repository {
         this.sendRequest(RequestMethod.Post, userUrl + "/" + id)
             .subscribe(() => {
                 this.users.splice(this.users.indexOf(this.users.find(x => x.id == id)), 1);
-                // this.getUsers();
             })
     }
 
@@ -134,7 +133,7 @@ export class Repository {
     createInstruction(instr: Instruction) {
         let data = {
             instructionName: instr.instructionName, description: instr.description
-            , steps: instr.steps, user: this.logUser
+            , steps: instr.steps
         };
         this.sendRequest(RequestMethod.Post, instructionsUrl, data)
             .subscribe(response => {
@@ -146,7 +145,8 @@ export class Repository {
     deleteInstruction(id: number) {
         this.sendRequest(RequestMethod.Delete, instructionsUrl + "/" + id, this.logUser)
             .subscribe(() => {
-                this.getInstructions("");
+                var ind = this.instructions.find(x=>x.instructionId==id);
+                this.instructions.splice(this.instructions.indexOf(ind), 1);
             });
     }
 
@@ -155,7 +155,7 @@ export class Repository {
         changes.forEach((value, key) =>
             patch.push({ op: "replace", path: key, value: value }));
         this.sendRequest(RequestMethod.Patch, instructionsUrl + "/" + id, patch)
-            .subscribe(response => this.getInstructions(""));
+            .subscribe(() => this.getInstructions(""));
     }
 
     login(name: string, password: string): Observable<Response> {

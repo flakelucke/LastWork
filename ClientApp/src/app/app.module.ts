@@ -14,6 +14,8 @@ import { AdminModule } from "./admin/admin.module";
 import { PaginationComponent } from "./structure/pagination/pagination.component";
 import { AuthModule } from "./auth/auth.module";
 import { UserDetailComponent } from './structure/user-detail/user-detail.component';
+import { FooterComponent } from './structure/footer/footer.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { UserDetailComponent } from './structure/user-detail/user-detail.compone
     InstructionTableComponent,
     InstructionDetailComponent,
     PaginationComponent,
-    UserDetailComponent
+    UserDetailComponent,
+    FooterComponent
     ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,7 +35,8 @@ import { UserDetailComponent } from './structure/user-detail/user-detail.compone
     HttpModule,
     RoutingConfig,
     AdminModule,
-    AuthModule
+    AuthModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent],

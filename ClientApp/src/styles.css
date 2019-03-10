@@ -3,11 +3,11 @@
     word-wrap:break-word;
 }
 .a_instr {
-    color: darkmagenta;
+    color: dodgerblue;
     text-decoration: none;
 }
 .a_instr:hover {
-    color: darkslategray;
+    color: dodgerblue;
     text-decoration: none;
 }
 .topnav {
@@ -19,15 +19,37 @@
     padding-bottom: 10px !important;
     margin-top: 5px !important;
 }
+.inst-div :last-child{
+  border-bottom: none;
+}
 h3 {
     color: darkmagenta;
+}
+.block-btn {
+  width: 60px;
+  margin-left: 5px;
+  height: 25px;
 }
 @media only screen and (max-width: 600px) {
     body {
         font-size: 0.9em;
     }
+    .pick-delete{
+      display: flex;
+      flex-direction: column;
+    }
+    .pick-delete button {
+      width: 72px;
+      margin-bottom: 4px;
+    }
+    .pick-delete button :last-child {
+      margin-bottom: 0px;
+    }
     h1 {
         font-size: 1.4em;
+    }
+    h3 {
+      font-size: 1.3em;
     }
     button {
         font-size: 0.9em !important;
@@ -65,10 +87,17 @@ h3 {
     }
     .container {
         width: 100%;
-        padding-right: 10px;
-        padding-left: 5px;
+        padding-right: 5px;
+
         margin-right: auto;
-        margin-left: auto;
+        margin-left: -5px;
+    }
+    .inst-block{
+      margin-top: 10px !important;
+      padding-top: 0px !important;
+    }
+    .margin-text {
+      margin-left: 10px !important;
     }
     .topnav {
      display: block;

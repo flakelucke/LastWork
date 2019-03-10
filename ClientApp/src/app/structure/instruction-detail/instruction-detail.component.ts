@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Repository } from 'src/app/models/repository';
 import { Instruction } from 'src/app/models/instruction-model/instruction.model';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
 import { AuthenticationService } from 'src/app/auth/authentication.service';
+import { filter } from 'rxjs-compat/operator/filter';
 
 @Component({
   selector: 'app-instruction-detail',
@@ -11,8 +12,10 @@ import { AuthenticationService } from 'src/app/auth/authentication.service';
 })
 export class InstructionDetailComponent implements OnInit {
 
+  backUrl: string;
+
   constructor(private repository: Repository,
-    router: Router,
+    public router: Router,
     activeRoute: ActivatedRoute,
     public authService: AuthenticationService) {
       let id = Number.parseInt(activeRoute.snapshot.params["id"]);
@@ -22,6 +25,7 @@ export class InstructionDetailComponent implements OnInit {
       else {
         router.navigateByUrl("/");
       }
+      
   }
 
   public get isAdmin() : boolean {
@@ -33,6 +37,7 @@ export class InstructionDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.backUrl = localStorage.getItem("url"); 
   }
 
 }

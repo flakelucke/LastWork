@@ -5,13 +5,13 @@
     </tr>
     <tr *ngFor="let user of admins">
         <td><a [routerLink]="['/user', user.id]">{{user.email}}</a></td>
-        <td><div class="d-flex flex-column">
+        <td><div class="d-flex flex-row">
           <p>{{user.isBlocked}}</p>
-          <button class="btn btn-danger btn-sm" style="width: 60px;margin-top: -15px"
+          <button class="btn btn-danger btn-sm block-btn" 
            (click)="blockAdmin(user.id)">Block</button>
         </div></td>
-        <td>
-          <button class="btn btn-sm btn-outline-primary mr-3" (click)="pickUpAdmin(user.id)">Pick up admin</button>
+        <td class="pick-delete">
+          <button class="btn btn-sm btn-outline-primary mr-3" (click)="pickUpAdmin(user.id)">Pick up</button>
           <button class="btn btn-danger btn-sm" (click)="deleteUser(user)">
               Delete
           </button>

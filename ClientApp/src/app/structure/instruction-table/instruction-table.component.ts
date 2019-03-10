@@ -28,7 +28,7 @@ export class InstructionTableComponent implements OnInit {
   }
 
   tableMode: boolean;
-
+  
   public get authenticated(): boolean {
     return this.authService.isAuthenticated();
   }

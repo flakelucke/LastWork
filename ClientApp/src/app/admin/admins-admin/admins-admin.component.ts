@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Repository } from 'src/app/models/repository';
 import { User } from 'src/app/models/user-model/user.model';
 

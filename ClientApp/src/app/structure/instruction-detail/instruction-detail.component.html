@@ -1,18 +1,11 @@
+<button class="btn btn-primary ml-2 mt-4" [routerLink]="[this.backUrl]">Back</button>
 <div style="padding:15px;">
-    <h1 style="text-align: center;color:  darkmagenta" class="mb-2">{{instruction?.instructionName || 'No Data'}}</h1>
-    <p style="text-align: center;" class="mb-5">{{instruction?.description || 'No Data'}}</p>
-    <div class="mt-5 pt-5">
-        <div *ngFor="let step of instruction?.steps;index as i" style="margin-left: 100px">
+    <h1 style="text-align: center;" class="mb-2 a_instr">{{instruction?.instructionName || 'No Data'}}</h1>
+    <p style="text-align: center;" class="mb-3">{{instruction?.description || 'No Data'}}</p>
+    <div class="mt-5 pt-5 inst-block">
+        <div class="margin-text" *ngFor="let step of instruction?.steps;index as i" style="margin-left: 100px">
             <h3>{{i+1}}: {{step?.stepName || 'No Data'}}</h3>
             <p>{{step?.stepDescription || 'No Data'}}</p>
         </div>
     </div>
 </div>
-<ng-template [ngIf]="!isAdmin" [ngIfElse]="backadmin">
-    <button class="btn btn-primary" routerLink="/table">Back</button>
-</ng-template>
-<ng-template #backadmin>
-    <button class="btn btn-sm btn-warning" routerLink="/admin/instructions">
-        Back
-    </button>
-</ng-template>
