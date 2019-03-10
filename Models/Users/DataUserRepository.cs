@@ -12,15 +12,12 @@ namespace LastWork.Models.Users
     {
         private readonly DataContext context;
         private UserManager<User> userManager;
-        private IInstructionRepository repository;
 
         public DataUserRepository(DataContext context,
-        UserManager<User> userManager,
-        IInstructionRepository repository)
+        UserManager<User> userManager)
         {
             this.context = context;
             this.userManager = userManager;
-            this.repository = repository;
         }
         public async Task DeleteUserAsync(string id)
         {
@@ -73,6 +70,7 @@ namespace LastWork.Models.Users
                 context.Entry(user).Collection(x => x.Instructions).Load();
                 AvoidRelatedUserData(user);
             }
+            user.Instructions.Reverse();
             return user;
         }
 
