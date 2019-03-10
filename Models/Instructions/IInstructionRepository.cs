@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LastWork.Models.BindingTargets;
+using LastWork.Models.Users;
 
 namespace LastWork.Models.Instructions
 {
     public interface IInstructionRepository
     {
         Task<IEnumerable<Instruction>> GetAllInstructions();
-        Task<Instruction> FindInstructionByIdAsync(string instructionId);
-        Task<long> CreateInstruction(InstructionData data);
+        Task<Instruction> FindInstructionByIdAsync(long instructionId);
+        Task<long> CreateInstruction(InstructionData data, User currentUser);
         Task<IEnumerable<Instruction>> SearchInstructions(string searchString);
-        Task DeleteInstruction(long id);
+        Task DeleteInstruction(Instruction instruction);
     }
 }

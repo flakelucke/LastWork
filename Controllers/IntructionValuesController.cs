@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LastWork.Models.Users;
+using Microsoft.AspNetCore.Http;
+using LastWork.Models.Representation;
 
 namespace LastWork.Controllers
 {
@@ -22,14 +24,17 @@ namespace LastWork.Controllers
         private IInstructionRepository repository;
         private DataContext context;
         UserManager<User> userManager;
+        private IUserRepository userRepository;
         public IntructionValuesController(IInstructionRepository repository,
                     DataContext context,
-                    UserManager<User> userManager
+                    UserManager<User> userManager,
+                    IUserRepository userRepository
                     )
         {
             this.repository = repository;
             this.context = context;
             this.userManager = userManager;
+            this.userRepository = userRepository;
         }
 
         [HttpGet]
@@ -50,14 +55,16 @@ namespace LastWork.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetInstruction(long id)
         {
-            return Ok(await repository.FindInstructionByIdAsync(id.ToString()));
+            var instr = await repository.FindInstructionByIdAsync(id);
+            return Ok(new InstructionsRepresentation(instr));
         }
         [HttpPost]
         public async Task<IActionResult> CreateInstruction([FromBody] InstructionData idata)
         {
             if (ModelState.IsValid)
             {
-                var idInst = await repository.CreateInstruction(idata);
+                var user = await userManager.GetUserAsync(HttpContext.User);
+                var idInst = await repository.CreateInstruction(idata, user);
                 return Ok(idInst);
             }
             else
@@ -69,21 +76,23 @@ namespace LastWork.Controllers
         [HttpGet]
         [Route("search/{search}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<Instruction>> SearchInstractionsAsync(string search)
+        public async Task<IEnumerable<InstructionsRepresentation>> SearchInstractionsAsync(string search)
         {
-            return await repository.SearchInstructions(search);
+            var instructions = await repository.SearchInstructions(search);
+            return instructions.Select(i => new InstructionsRepresentation(i));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInstruction(long id)
         {
-            // var root = await repository.FindInstructionByIdAsync(id.ToString());
-            // if (root.User.Id == user.Id || await userManager.IsInRoleAsync(user, "administrator"))
-            // {
-                await repository.DeleteInstruction(id);
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            var instr = await repository.FindInstructionByIdAsync(id);
+            if (instr.User.Id == user.Id || await userManager.IsInRoleAsync(user, "administrator"))
+            {
+                await repository.DeleteInstruction(instr);
                 return Ok();
-            // }
-            // return BadRequest();
+            }
+            return BadRequest();
         }
 
         [HttpPatch("{id}")]
@@ -98,7 +107,6 @@ namespace LastWork.Controllers
             {
                 InstructionName = instruction.InstructionName,
                 Description = instruction.Description,
-                User = instruction.User,
                 Steps = instruction.Steps.Select(p => new InstructionStepData
                 { InstructionStepId = p.InstructionStepId, StepName = p.StepName, StepDescription = p.StepDescription }).ToList()
             };

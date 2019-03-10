@@ -17,15 +17,12 @@ namespace LastWork.Models.BindingTargets
             get; set;
         }
         public List<InstructionStepData> Steps { get; set; }
-        [Required]
-        public User User { get;set;}
 
         public Instruction GetInstruction() => new Instruction()
         {
             InstructionName = InstructionName,
             Description = Description,
-            Steps = Steps?.Select(s => s.GetInstructionStep()).ToList() ?? null,
-            User = User
+            Steps = Steps?.Select(s => s.GetInstructionStep()).ToList() ?? null
         };
     }
 }

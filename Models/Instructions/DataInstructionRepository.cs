@@ -20,22 +20,13 @@ namespace LastWork.Models.Instructions
             this.context = context;
         }
 
-        public Task<Instruction> FindInstructionByIdAsync(string instructionId)
+        public Task<Instruction> FindInstructionByIdAsync(long instructionId)
         {
             Task<Instruction> result = context.Instructions
                .Include(p => p.Steps)
-               .Include(x => x.User).ThenInclude(s => s.Instructions)
-               .FirstOrDefaultAsync(p => Convert.ToString(p.InstructionId) == instructionId);
+               .Include(x => x.User)
+               .FirstOrDefaultAsync(p => p.InstructionId == instructionId);
 
-            if (result != null)
-            {
-
-                if (result.Result.User != null)
-                {
-                    result.Result.User.Instructions = null;
-                }
-
-            }
             return result;
         }
 
@@ -44,22 +35,25 @@ namespace LastWork.Models.Instructions
             var result = await context.Instructions
             // .Include(p => p.Steps)
             .ToListAsync();
+            result.Reverse();
+
             return result;
         }
 
-        public async Task<long> CreateInstruction(InstructionData data)
+        public async Task<long> CreateInstruction(InstructionData data,User user)
         {
             Instruction i = data.GetInstruction();
-            context.Attach(i.User);
+            i.User = user;
+            // context.Attach(i.User);
             await context.AddAsync(i);
             await context.SaveChangesAsync();
             return i.InstructionId;
         }
 
-        public async Task DeleteInstruction(long id)
+        public async Task DeleteInstruction(Instruction instruction)
         {
-            context.Remove(new Instruction { InstructionId = id});
-            context.SaveChanges();
+            context.Instructions.Remove(instruction);
+            await context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Instruction>> SearchInstructions(string searchString)
@@ -67,11 +61,11 @@ namespace LastWork.Models.Instructions
             var result = await context.Instructions
             .Where(x => x.Description.Contains(searchString) ||
                 x.InstructionName.Contains(searchString))
-            .Include(p => p.Steps)
-            .Include(p => p.User).ThenInclude(s => s.Instructions)
+            // .Include(p => p.Steps)
+            // .Include(p => p.User).ThenInclude(s => s.Instructions)
             .ToListAsync();
             
-            AvoidReference(result);
+            // AvoidReference(result);
             return result;
         }
 
