@@ -21,6 +21,8 @@ namespace LastWork.Models
                 .WithOne().OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<User>().HasMany<Instruction>(p=>p.Instructions)
             .WithOne(r=>r.User).OnDelete(DeleteBehavior.Cascade);
+            // modelBuilder.Entity<Instruction>().HasOne<User>(p => p.User)
+            //     .WithMany(s => s.Instructions).OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }
