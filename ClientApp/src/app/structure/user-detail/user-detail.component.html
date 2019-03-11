@@ -1,19 +1,4 @@
-<div *ngIf="tableMode; else create">
-    <table class="table">
-        <tr>
-            <th>Email</th>
-            <td>{{user?.email || 'No Data'}}</td>
-        </tr>
-        <tr>
-            <th>Confirmed Email</th>
-            <td>{{user?.emailConfirmed || 'No Data'}}</td>
-        </tr>
-        <tr>
-            <th colspan="2" style="text-align: center">
-                Instructions
-            </th>
-        </tr>
-    </table>
+<!-- <div *ngIf="tableMode; else create">
     <div class="d-flex flex-column ml-3">
         <button class="btn btn-primary create-button mb-1" (click)="clearInstruction(); tableMode = false"
             style="width: 120px; margin: 0 auto">Create</button>
@@ -50,4 +35,21 @@
     <button class="btn btn-info" (click)="clearInstruction()">
         Cancel
     </button>
-</ng-template>
+</ng-template> -->
+
+<table class="table">
+    <tr>
+        <th>Email</th>
+        <td>{{user?.email || 'No Data'}}</td>
+    </tr>
+    <tr>
+        <th>Confirmed Email</th>
+        <td>{{user?.emailConfirmed || 'No Data'}}</td>
+    </tr>
+    <tr>
+        <th colspan="2" style="text-align: center">
+            Instructions
+        </th>
+    </tr>
+</table>
+<app-instruction-admin [userId]="id"></app-instruction-admin>

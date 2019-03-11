@@ -3,7 +3,7 @@
     <h1 style="text-align: center;" class="mb-2 a_instr">{{instruction?.instructionName || 'No Data'}}</h1>
     <p style="text-align: center;" class="mb-3">{{instruction?.description || 'No Data'}}</p>
     <div class="mt-5 pt-5 inst-block">
-        <div class="margin-text" *ngFor="let step of instruction?.steps;index as i" style="margin-left: 100px">
+        <div class="margin-text" *ngFor="let step of instruction?.steps;index as i" style="margin-left: 60px">
             <h3>{{i+1}}: {{step?.stepName || 'No Data'}}</h3>
             <p>{{step?.stepDescription || 'No Data'}}</p>
         </div>

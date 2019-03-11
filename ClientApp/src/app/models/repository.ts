@@ -26,6 +26,7 @@ export class Repository {
         // this.getLogUser(localStorage.getItem("userId"));
     }
 
+
     get pagination(): Pagination {
         return this.paginationObject;
     }
@@ -93,36 +94,45 @@ export class Repository {
                 this.admins.splice(this.admins.indexOf(this.admins.find(x => x.id == id)), 1);
             })
     }
-    blockUser(id:string) {
+    blockUser(id: string) {
         this.sendRequest(RequestMethod.Post, userUrl + "/block/" + id)
-        .subscribe(()=> {
-            if (id == this.logUser.id) {
-                localStorage.removeItem("admin");
-                localStorage.removeItem("user");
-                localStorage.removeItem("userId");
-                this.router.navigateByUrl("/");
-            }
-            this.getUsers();
-        })
+            .subscribe(() => {
+                if (id == this.logUser.id) {
+                    localStorage.removeItem("admin");
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("userId");
+                    this.router.navigateByUrl("/");
+                }
+                this.getUsers();
+            })
     }
-    blockAdmin(id:string) {
+    blockAdmin(id: string) {
         this.sendRequest(RequestMethod.Post, userUrl + "/block/" + id)
-        .subscribe(()=> {
-            if (id == this.logUser.id) {
-                localStorage.removeItem("admin");
-                localStorage.removeItem("user");
-                localStorage.removeItem("userId");
-                this.router.navigateByUrl("/");
-            }
-            this.getAdmins();
-        })
+            .subscribe(() => {
+                if (id == this.logUser.id) {
+                    localStorage.removeItem("admin");
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("userId");
+                    this.router.navigateByUrl("/");
+                }
+                this.getAdmins();
+            })
     }
-    getInstructions(search: string) {
+    getInstructions(search: string, userId?: string) {
+        if(userId) {
+            this.sendRequest(RequestMethod.Post, instructionsUrl + "/user/"+userId)
+            .subscribe(response => {
+                this.instructions = response;
+                this.pagination.currentPage = 1;
+            })
+        }
+        else {
         this.sendRequest(RequestMethod.Get, instructionsUrl + (search != null ? "?search=" + search : ""))
             .subscribe(response => {
                 this.instructions = response;
                 this.pagination.currentPage = 1;
             })
+        }
     }
 
     getInstruction(id: number) {
@@ -145,7 +155,7 @@ export class Repository {
     deleteInstruction(id: number) {
         this.sendRequest(RequestMethod.Delete, instructionsUrl + "/" + id, this.logUser)
             .subscribe(() => {
-                var ind = this.instructions.find(x=>x.instructionId==id);
+                var ind = this.instructions.find(x => x.instructionId == id);
                 this.instructions.splice(this.instructions.indexOf(ind), 1);
             });
     }
@@ -183,4 +193,6 @@ export class Repository {
                     ? response.json() : null;
             });
     }
+
+    ngOnInit() {}
 }

@@ -40,7 +40,9 @@ namespace LastWork.Controllers.Users
         [Authorize]
         public async Task<IActionResult> FindUserById(string id)
         {
-            return Ok(await repository.FindUserById(id));
+            var user = await repository.FindUserById(id);
+            user.Instructions = null;
+            return Ok(user);
         }
 
         [HttpDelete("{id}")]

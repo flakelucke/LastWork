@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Repository } from 'src/app/models/repository';
 import { Instruction } from 'src/app/models/instruction-model/instruction.model';
+import { User } from 'src/app/models/user-model/user.model';
 
 @Component({
   selector: 'app-instruction-admin',
@@ -10,11 +11,13 @@ import { Instruction } from 'src/app/models/instruction-model/instruction.model'
 export class InstructionAdminComponent implements OnInit {
 
   constructor(private repo: Repository) {
-    this.repo.getInstructions("");
     this.repo.instruction =null;
    }
 
+   @Input() userId:string;
+
    tableMode: boolean;
+   oldFirst: boolean;
  
     get instruction(): Instruction {
         return this.repo.instruction;
@@ -51,8 +54,15 @@ export class InstructionAdminComponent implements OnInit {
       return this.repo.instructions;
   }
 
+  oldFirstInstr(){
+      this.repo.instructions.reverse();
+  }
+
   ngOnInit() {
+    this.repo.instructions = null;
     this.tableMode = true;
+    this.repo.getInstructions("",this.userId);
+    this.oldFirst = false;
   }
 
 }

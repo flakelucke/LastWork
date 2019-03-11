@@ -1,10 +1,16 @@
 <div class="form-group">
   <label>Name</label>
-  <input class="form-control" [(ngModel)]="instruction.instructionName" />
+  <input name="instname" class="form-control" [(ngModel)]="instruction.instructionName" required/>
+  <div *ngIf="instname.invalid" class="text-danger">
+    Please enter name
+  </div>
 </div>
 <div class="form-group">
   <label>Description</label>
-  <textarea class="form-control" [(ngModel)]="instruction.description" rows="5" cols="100"></textarea>
+  <textarea name="inst-desc" class="form-control" [(ngModel)]="instruction.description" rows="5" cols="100" required></textarea>
+  <div *ngIf="inst-desc.invalid" class="text-danger">
+    Please enter description
+  </div>
 </div>
 <div class="form-group">
   <label>Steps</label>

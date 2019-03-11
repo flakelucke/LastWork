@@ -14,7 +14,6 @@ export class PersonAreaGuard {
         var id = state.url.includes(localStorage.getItem("userId"));
         var admin = localStorage.getItem("admin");
         if (id || admin) {
-            console.log("true");
             return true;
         }
         else {

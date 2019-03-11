@@ -15,8 +15,8 @@ export class PaginationAdminComponent implements OnInit {
   }
 
   get pages(): number[] {
-    if (this.repository.instructions != null) {
-      return Array(Math.ceil(this.repository.instructions.length
+    if (this.repository.users != null) {
+      return Array(Math.ceil(this.repository.users.length
         / this.repository.pagination.productsPerPage))
         .fill(0).map((x,i)=> i +1);
     }

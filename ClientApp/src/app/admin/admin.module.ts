@@ -20,6 +20,6 @@ import { AdminsAdminComponent } from "./admins-admin/admins-admin.component";
         UsersAdminComponent,
         AdminsAdminComponent],
     providers: [],
-    exports: [InstructionEditorComponent, InstructionAdminComponent]
+    exports: [InstructionEditorComponent, InstructionAdminComponent,PaginationAdminComponent]
 })
 export class AdminModule { }

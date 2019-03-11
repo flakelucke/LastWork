@@ -37,6 +37,15 @@ namespace LastWork.Controllers
             this.userRepository = userRepository;
         }
 
+        [HttpPost]
+        [Route("user/{userId}")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<Instruction>> GetUserInstructions(string userId)
+        {
+          var user =  await userRepository.FindUserById(userId);
+          return user.Instructions;
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IEnumerable<Instruction>> GetAllInstruction([FromQuery]string search)

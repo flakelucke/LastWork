@@ -40,6 +40,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [UserDetailComponent]
+  exports: [UserDetailComponent,PaginationComponent]
 })
 export class AppModule { }
