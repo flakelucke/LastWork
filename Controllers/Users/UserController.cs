@@ -49,12 +49,12 @@ namespace LastWork.Controllers.Users
         [Authorize]
         public async Task<IActionResult> DeleteUserAsync(string id, [FromBody] User user)
         {
-            if (user.Id == id || await userManager.IsInRoleAsync(user, "administrator"))
-            {
+            // if (user.Id == id || await userManager.IsInRoleAsync(user, "administrator"))
+            // {
                 await repository.DeleteUserAsync(id);
                 return Ok();
-            }
-            return BadRequest();
+            // }
+            // return BadRequest();
         }
         [HttpPost("{id}")]
         [Authorize(Roles = "administrator")]

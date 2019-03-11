@@ -1,42 +1,6 @@
-<!-- <div *ngIf="tableMode; else create">
-    <div class="d-flex flex-column ml-3">
-        <button class="btn btn-primary create-button mb-1" (click)="clearInstruction(); tableMode = false"
-            style="width: 120px; margin: 0 auto">Create</button>
-        <div *ngFor="let inst of user?.instructions" class="mb-4 border-bottom">
-            <h1 style="word-wrap: break-word"><a class="a_instr"
-                    [routerLink]="['/detail', inst.instructionId]">{{inst.instructionName}}</a></h1>
-            <p>description: {{inst?.description || 'No Data'}}</p>
-            <div class="d-flex flex-row">
-                <button class="btn btn-sm btn-primary mr-2 "
-                    (click)="selectInstruction(inst.instructionId); tableMode = false">Edit</button>
-                <button class="btn btn-sm btn-danger" (click)="deleteInstruction(inst.instructionId)">Delete</button>
-            </div>
-        </div>
-    </div>
+<div class=" d-flex flex-row justify-content-start m-4">
+    <button class="btn btn-danger" (click)="deleteUser()">Delete myself</button>
 </div>
-<ng-template #edit>
-    <td colspan="6">
-        <app-instruction-editor></app-instruction-editor>
-        <div class="text-center">
-            <button class="btn btn-sm btn-primary mr-1" (click)="saveInstruction()">
-                Save
-            </button>
-            <button class="btn btn-sm btn-info" (click)="clearInstruction()">
-                Cancel
-            </button>
-        </div>
-    </td>
-</ng-template>
-<ng-template #create>
-    <app-instruction-editor></app-instruction-editor>
-    <button class="btn btn-primary mr-1" (click)="saveInstruction()">
-        Save
-    </button>
-    <button class="btn btn-info" (click)="clearInstruction()">
-        Cancel
-    </button>
-</ng-template> -->
-
 <table class="table">
     <tr>
         <th>Email</th>

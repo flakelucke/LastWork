@@ -30,11 +30,15 @@ namespace LastWork.Models.Instructions
             return result;
         }
 
-        public async Task<IEnumerable<Instruction>> GetAllInstructions()
+        public async Task<IEnumerable<Instruction>> GetAllInstructions(string category)
         {
             var result = await context.Instructions
-            // .Include(p => p.Steps)
             .ToListAsync();
+             if (category!="null") {
+                string catLower = category.ToLower();
+                result = result.Where(p => p.Category.ToLower().Contains(catLower)).ToList();
+            }
+
             result.Reverse();
 
             return result;
@@ -44,7 +48,6 @@ namespace LastWork.Models.Instructions
         {
             Instruction i = data.GetInstruction();
             i.User = user;
-            // context.Attach(i.User);
             await context.AddAsync(i);
             await context.SaveChangesAsync();
             return i.InstructionId;
@@ -60,12 +63,9 @@ namespace LastWork.Models.Instructions
         {
             var result = await context.Instructions
             .Where(x => x.Description.Contains(searchString) ||
-                x.InstructionName.Contains(searchString))
-            // .Include(p => p.Steps)
-            // .Include(p => p.User).ThenInclude(s => s.Instructions)
+                x.InstructionName.Contains(searchString)) 
             .ToListAsync();
             
-            // AvoidReference(result);
             return result;
         }
 

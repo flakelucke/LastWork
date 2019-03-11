@@ -9,7 +9,9 @@ import { Instruction } from 'src/app/models/instruction-model/instruction.model'
 })
 export class OverviewComponent implements OnInit {
 
-  constructor(private repo: Repository) { }
+  constructor(private repo: Repository) {
+    this.repo.getInstructions("",null);
+   }
 
   get instructions(): Instruction[] {
     return this.repo.instructions;

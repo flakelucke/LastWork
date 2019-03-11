@@ -6,6 +6,7 @@ export class Instruction {
         public instructionId?: number,
         public instructionName?: string,
         public description?: string,
+        public category? :string,
         public steps?: Step[],
         public user?: User
     )

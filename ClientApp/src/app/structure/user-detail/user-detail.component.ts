@@ -28,7 +28,9 @@ export class UserDetailComponent implements OnInit {
   get user(): User {
     return this.repository.user;
   }
-
+  deleteUser() {
+    this.repository.deleteUser(this.repository.user)
+  }
   tableMode: boolean;
 
   get instruction(): Instruction {

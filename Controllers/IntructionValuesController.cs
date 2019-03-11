@@ -48,11 +48,15 @@ namespace LastWork.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IEnumerable<Instruction>> GetAllInstruction([FromQuery]string search)
+        public async Task<IEnumerable<Instruction>> GetAllInstruction([FromQuery]string search,string category)
         {
+            if(category=="undefined")
+            {
+                category="null";
+            }
             if (search == null || search.Length == 0)
             {
-                return await repository.GetAllInstructions();
+                return await repository.GetAllInstructions(category);
             }
             else
             {
@@ -116,6 +120,7 @@ namespace LastWork.Controllers
             {
                 InstructionName = instruction.InstructionName,
                 Description = instruction.Description,
+                Category = instruction.Category,
                 Steps = instruction.Steps.Select(p => new InstructionStepData
                 { InstructionStepId = p.InstructionStepId, StepName = p.StepName, StepDescription = p.StepDescription }).ToList()
             };
@@ -127,6 +132,7 @@ namespace LastWork.Controllers
 
                 instruction.Description = pdata.Description;
                 instruction.InstructionName = pdata.InstructionName;
+                instruction.Category = pdata.Category;
                 if (pdataStepCount < instrStepCount)
                     if (pdataStepCount == 0)
                         instruction.Steps.RemoveRange(0, instrStepCount);

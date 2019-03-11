@@ -7,7 +7,7 @@ namespace LastWork.Models.Instructions
 {
     public interface IInstructionRepository
     {
-        Task<IEnumerable<Instruction>> GetAllInstructions();
+        Task<IEnumerable<Instruction>> GetAllInstructions(string category);
         Task<Instruction> FindInstructionByIdAsync(long instructionId);
         Task<long> CreateInstruction(InstructionData data, User currentUser);
         Task<IEnumerable<Instruction>> SearchInstructions(string searchString);

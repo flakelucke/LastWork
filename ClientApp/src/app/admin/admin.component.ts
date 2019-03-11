@@ -12,7 +12,7 @@ export class AdminComponent implements OnInit {
   constructor(private repo: Repository,
     public authService: AuthenticationService) {
       
-    this.repo.getInstructions("");
+    this.repo.getInstructions("",null);
   }
 
   ngOnInit() {

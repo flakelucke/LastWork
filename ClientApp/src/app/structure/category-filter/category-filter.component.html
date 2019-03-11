@@ -1,0 +1,17 @@
+<div class="mr-2" class="d-flex flex-row mb-2 overview-btn" *ngIf="authenticated">
+    <button class="btn btn-outline-secondary  btn-block mr-1 btn-menu" style="height: 40px" (click)="setCurrentCategory(null)">
+        All
+    </button>
+    <button class="btn btn-outline-secondary mr-1 btn-menu" [class.active]="currentCategory == Recipes"
+        (click)="setCurrentCategory('Recipes')">
+        Recipes
+    </button>
+    <button class="btn btn-outline-secondary  mr-1 btn-menu" [class.active]="currentCategory == Thing"
+        (click)="setCurrentCategory('Thing')">
+        Thing
+    </button>
+    <button class="btn btn-outline-secondary btn-menu" [class.active]="currentCategory == Something"
+        (click)="setCurrentCategory('Something')">
+        Something
+    </button>
+</div>

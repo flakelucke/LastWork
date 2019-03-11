@@ -17,6 +17,7 @@ import { UserDetailComponent } from './structure/user-detail/user-detail.compone
 import { FooterComponent } from './structure/footer/footer.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +26,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     InstructionDetailComponent,
     PaginationComponent,
     UserDetailComponent,
-    FooterComponent
+    FooterComponent,
     ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,10 +37,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     RoutingConfig,
     AdminModule,
     AuthModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+   
   ],
   providers: [],
-  bootstrap: [AppComponent],
-  exports: [UserDetailComponent,PaginationComponent]
+  exports: [UserDetailComponent,PaginationComponent],
+  bootstrap: [AppComponent]
+  
 })
 export class AppModule { }

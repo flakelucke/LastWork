@@ -6,7 +6,7 @@ import "rxjs/add/operator/map";
 import { Pagination } from "./config-classes.repository";
 import { User } from "./user-model/user.model";
 import { Router } from "@angular/router";
-import { forEach } from "@angular/router/src/utils/collection";
+import { Filter } from "./filter-model/filter.model";
 
 const userUrl = "/api/users";
 const instructionsUrl = "/api/instructions";
@@ -19,13 +19,17 @@ export class Repository {
     logUser: User;
     user: User;
     admins: User[];
+    categories: string[] = [];
+    private filterObject = new Filter();
     private paginationObject = new Pagination();
 
     constructor(private http: Http,
         private router: Router) {
-        // this.getLogUser(localStorage.getItem("userId"));
     }
 
+    get filter(): Filter {
+        return this.filterObject;
+    }  
 
     get pagination(): Pagination {
         return this.paginationObject;
@@ -72,6 +76,7 @@ export class Repository {
                     this.router.navigateByUrl("/");
                 }
                 this.users.splice(this.users.indexOf(user), 1);
+                this.admins.splice(this.users.indexOf(user), 1);
             })
 
     }
@@ -119,19 +124,20 @@ export class Repository {
             })
     }
     getInstructions(search: string, userId?: string) {
-        if(userId) {
-            this.sendRequest(RequestMethod.Post, instructionsUrl + "/user/"+userId)
-            .subscribe(response => {
-                this.instructions = response;
-                this.pagination.currentPage = 1;
-            })
+        
+        if (userId) {
+            this.sendRequest(RequestMethod.Post, instructionsUrl + "/user/" + userId)
+                .subscribe(response => {
+                    this.instructions = response;
+                    this.pagination.currentPage = 1;
+                })
         }
         else {
-        this.sendRequest(RequestMethod.Get, instructionsUrl + (search != null ? "?search=" + search : ""))
-            .subscribe(response => {
-                this.instructions = response;
-                this.pagination.currentPage = 1;
-            })
+            this.sendRequest(RequestMethod.Get, instructionsUrl + (search != null ? "?search=" + search : "")+"&category=" + this.filter.category)
+                .subscribe(response => {
+                    this.instructions = response;
+                    this.pagination.currentPage = 1;
+                })
         }
     }
 
@@ -143,7 +149,7 @@ export class Repository {
     createInstruction(instr: Instruction) {
         let data = {
             instructionName: instr.instructionName, description: instr.description
-            , steps: instr.steps
+            , steps: instr.steps,category: instr.category
         };
         this.sendRequest(RequestMethod.Post, instructionsUrl, data)
             .subscribe(response => {
@@ -194,5 +200,5 @@ export class Repository {
             });
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 }

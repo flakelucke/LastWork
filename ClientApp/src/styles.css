@@ -2,6 +2,18 @@
     display: inline-block;
     word-wrap:break-word;
 }
+.inst-div {
+ padding: 10px;
+}
+.inst-div:first-child {
+  margin-top: 30px;
+ }
+.border-class {
+  border: 2px solid darkgrey;
+  border-radius: 10px;
+  margin-bottom: 7px;
+  border-bottom: none;
+}
 .a_instr {
     color: dodgerblue;
     text-decoration: none;
@@ -10,6 +22,9 @@
     color: dodgerblue;
     text-decoration: none;
 }
+.btn-menu {
+  width: 22%;
+}
 .topnav {
     display: none;
 }
@@ -17,7 +32,7 @@
     margin-left: 5px !important;
     border-bottom: 3px solid black !important;
     padding-bottom: 10px !important;
-    margin-top: 5px !important;
+    margin-top: 0px !important;
 }
 .inst-div :last-child{
   border-bottom: none;
@@ -82,8 +97,9 @@ h3 {
         flex-direction: column;
     }
     .overview-btn {
-        margin-top: 9px;
+        margin-top: 3px;
         height: 40px !important;
+        margin-bottom: 10px;
     }
     .container {
         width: 100%;
